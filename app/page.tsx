@@ -9,6 +9,12 @@ export default function HomePage() {
             <h1 className="text-xl font-semibold gradient-text">Next.js Routing Masterclass</h1>
             <div className="flex gap-4">
               <Link
+                href="/slides"
+                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
+              >
+                Slides
+              </Link>
+              <Link
                 href="/presentation"
                 className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
               >

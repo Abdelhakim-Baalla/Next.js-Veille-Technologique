@@ -35,6 +35,12 @@ export default function PresentationPage() {
                 Accueil
               </Link>
               <Link
+                href="/slides"
+                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
+              >
+                Slides
+              </Link>
+              <Link
                 href="/dashboard"
                 className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
               >
