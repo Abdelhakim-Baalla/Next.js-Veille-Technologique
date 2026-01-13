@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import { CustomCursor } from './components/custom-cursor'
+import { FloatingShapes } from './components/floating-shapes'
+import { Navigation } from './components/navigation'
 
 export const metadata: Metadata = {
   title: 'Next.js Routing Masterclass',
-  description: 'Démonstration des concepts avancés du routage Next.js 15',
+  description: 'A comprehensive demonstration of Next.js 15 App Router patterns and best practices',
 }
 
 export default function RootLayout({
@@ -15,9 +15,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className="dark">
-      <body className={inter.className}>
-        {children}
+    <html lang="en">
+      <body className="min-h-screen antialiased">
+        <CustomCursor />
+        <FloatingShapes />
+        <Navigation />
+        <main className="relative z-10">
+          {children}
+        </main>
       </body>
     </html>
   )

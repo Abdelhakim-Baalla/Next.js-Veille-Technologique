@@ -1,75 +1,131 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { IconArrowLeft, IconSpinner, IconShield } from '../components/icons'
 
 export default function LoginPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simuler une authentification
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Créer un cookie de session
+    // Simulate login - set a cookie
     document.cookie = 'session=authenticated; path=/; max-age=3600'
 
-    // Rediriger vers la page demandée ou dashboard
-    const redirect = searchParams.get('redirect') || '/dashboard'
-    router.push(redirect)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    router.push('/dashboard/contact')
+    router.refresh()
+  }
+
+  const handleDemoAccess = () => {
+    document.cookie = 'session=authenticated; path=/; max-age=3600'
+    router.push('/dashboard')
     router.refresh()
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="glass p-8 rounded-lg border border-border max-w-md w-full">
-        <h1 className="text-3xl font-light mb-8 text-center">Connexion</h1>
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium mb-2 text-foreground/70"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              required
-              className="w-full px-4 py-3 bg-accent border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/20 text-foreground"
-              placeholder="votre@email.com"
-            />
+    <div className="min-h-screen pt-28 pb-20 flex items-center justify-center">
+      <div className="max-w-md w-full mx-auto px-6">
+        {/* Back Link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-8 interactive"
+        >
+          <IconArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+
+        {/* Login Card */}
+        <div className="card p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
+              <IconShield className="w-8 h-8" />
+            </div>
+            <h1 className="text-2xl font-bold mb-2">Authentication Required</h1>
+            <p className="text-gray-600 text-sm">
+              This page demonstrates middleware route protection
+            </p>
           </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-2 text-foreground/70"
-            >
-              Mot de passe
-            </label>
-            <input
-              type="password"
-              id="password"
-              required
-              className="w-full px-4 py-3 bg-accent border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/20 text-foreground"
-              placeholder="••••••••"
-            />
+
+          {/* Middleware Info */}
+          <div className="mb-6 p-4 bg-gray-50 rounded-xl">
+            <p className="text-xs font-mono text-gray-600 mb-2">middleware.ts</p>
+            <p className="text-sm text-gray-600">
+              The contact form is protected. You were redirected here because
+              no session cookie was found.
+            </p>
           </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full px-6 py-3 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? 'Connexion...' : 'Se connecter'}
-          </button>
-        </form>
-        <p className="mt-6 text-sm text-foreground/50 text-center">
-          Utilisez n'importe quel email/mot de passe pour la démo
-        </p>
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">Email</label>
+              <input
+                type="email"
+                defaultValue="demo@example.com"
+                className="input"
+                disabled={isLoading}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Password</label>
+              <input
+                type="password"
+                defaultValue="••••••••"
+                className="input"
+                disabled={isLoading}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-primary w-full flex items-center justify-center gap-2 interactive"
+            >
+              {isLoading ? (
+                <>
+                  <IconSpinner className="w-4 h-4" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+          </form>
+
+          {/* Demo Button */}
+          <div className="text-center">
+            <button
+              onClick={handleDemoAccess}
+              className="text-sm text-gray-500 hover:text-black transition-colors interactive"
+            >
+              Skip authentication for demo
+            </button>
+          </div>
+        </div>
+
+        {/* Code Example */}
+        <div className="card mt-6">
+          <p className="text-xs font-mono text-gray-500 mb-2">How it works:</p>
+          <pre className="text-xs font-mono text-gray-600 bg-gray-50 p-4 rounded-lg overflow-x-auto">
+{`// middleware.ts
+export function middleware(request) {
+  const session = request.cookies
+    .get('session')
+  
+  if (!session) {
+    return NextResponse.redirect(
+      new URL('/login', request.url)
+    )
+  }
+}`}
+          </pre>
+        </div>
       </div>
     </div>
   )

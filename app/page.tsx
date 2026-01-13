@@ -1,165 +1,176 @@
 import Link from 'next/link'
+import { IconArrowRight, IconCode, IconLayers, IconRoute, IconShield } from './components/icons'
+
+const features = [
+  {
+    icon: IconLayers,
+    title: 'Nested Layouts',
+    description: 'Hierarchical layout system with layout.tsx, template.tsx, and page.tsx',
+    href: '/dashboard',
+  },
+  {
+    icon: IconRoute,
+    title: 'Parallel Routes',
+    description: 'Render multiple pages simultaneously with @slots',
+    href: '/dashboard',
+  },
+  {
+    icon: IconCode,
+    title: 'Intercepting Routes',
+    description: 'Modal patterns with (.)photo/[id] conventions',
+    href: '/photos',
+  },
+  {
+    icon: IconShield,
+    title: 'Middleware',
+    description: 'Route protection and authentication flows',
+    href: '/dashboard/contact',
+  },
+]
+
+const concepts = [
+  { label: 'Route Groups', code: '(marketing)' },
+  { label: 'Dynamic Routes', code: '[id]' },
+  { label: 'Parallel Routes', code: '@analytics' },
+  { label: 'Intercepting', code: '(.)photo' },
+  { label: 'Loading UI', code: 'loading.tsx' },
+  { label: 'Error Handling', code: 'error.tsx' },
+]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="glass-strong sticky top-0 z-50 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold gradient-text">Next.js Routing Masterclass</h1>
-            <div className="flex gap-4">
-              <Link
-                href="/slides"
-                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
-              >
-                Slides
-              </Link>
-              <Link
-                href="/presentation"
-                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
-              >
-                Présentation
-              </Link>
-              <Link
-                href="/marketing"
-                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
-              >
-                Marketing
-              </Link>
-              <Link
-                href="/dashboard"
-                className="text-foreground/70 hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/50"
-              >
-                Dashboard
-              </Link>
-            </div>
+    <div className="min-h-screen pt-28 pb-20">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Hero Section */}
+        <section className="text-center mb-24">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-600 mb-8 animate-fadeInUp opacity-0 stagger-1">
+            <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
+            Next.js 15 App Router
           </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-6 py-20">
-        <div className="space-y-12 animate-fade-in">
-          <div className="text-center space-y-6">
-            <h2 className="text-6xl md:text-7xl font-light tracking-tight">
-              Concepts Avancés
-              <span className="block mt-2 gradient-text">du Routage Next.js 15</span>
-            </h2>
-            <p className="text-xl text-foreground/60 max-w-2xl mx-auto">
-              Démonstration complète et pédagogique des fonctionnalités de routage
-            </p>
-            <div className="flex gap-4 justify-center pt-6">
-              <Link
-                href="/presentation"
-                className="px-8 py-4 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-all glow hover:glow-strong font-medium"
-              >
-                Voir la Présentation
-              </Link>
-              <Link
-                href="/dashboard"
-                className="px-8 py-4 border border-border rounded-lg hover:bg-accent/50 transition-all font-medium"
-              >
-                Explorer la Démo
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-            <Link
-              href="/marketing"
-              className="glass-strong p-8 rounded-xl border border-border card-hover group"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  📁
-                </div>
-                <h3 className="text-2xl font-semibold">Route Groups</h3>
-              </div>
-              <p className="text-foreground/60 leading-relaxed">
-                Organisation du code avec des groupes de routes sans affecter l'URL. 
-                Parfait pour séparer les sections marketing et dashboard.
-              </p>
-              <div className="mt-4 text-primary text-sm font-medium">
-                Explorer →
-              </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 animate-fadeInUp opacity-0 stagger-2">
+            Routing
+            <br />
+            <span className="text-gray-400">Masterclass</span>
+          </h1>
+          
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-fadeInUp opacity-0 stagger-3">
+            A comprehensive demonstration of advanced routing patterns, 
+            from nested layouts to parallel routes and intercepting modals.
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 animate-fadeInUp opacity-0 stagger-4">
+            <Link href="/dashboard" className="btn-primary inline-flex items-center gap-2 interactive">
+              Explore Dashboard
+              <IconArrowRight className="w-4 h-4" />
             </Link>
-
-            <Link
-              href="/dashboard"
-              className="glass-strong p-8 rounded-xl border border-border card-hover group"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  ⚡
-                </div>
-                <h3 className="text-2xl font-semibold">Parallel Routes</h3>
-              </div>
-              <p className="text-foreground/60 leading-relaxed">
-                Rendu simultané de plusieurs routes avec des slots (@analytics, @team). 
-                Chaque slot charge indépendamment avec son propre loading.
-              </p>
-              <div className="mt-4 text-primary text-sm font-medium">
-                Explorer →
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard/photos"
-              className="glass-strong p-8 rounded-xl border border-border card-hover group"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🎯
-                </div>
-                <h3 className="text-2xl font-semibold">Intercepting Routes</h3>
-              </div>
-              <p className="text-foreground/60 leading-relaxed">
-                Modales de prévisualisation sans perdre le contexte. 
-                La galerie reste visible en arrière-plan lors de la navigation.
-              </p>
-              <div className="mt-4 text-primary text-sm font-medium">
-                Explorer →
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard"
-              className="glass-strong p-8 rounded-xl border border-border card-hover group"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🔄
-                </div>
-                <h3 className="text-2xl font-semibold">Streaming & Error Boundaries</h3>
-              </div>
-              <p className="text-foreground/60 leading-relaxed">
-                Chargement progressif avec Skeleton Screens et gestion d'erreurs granulaires. 
-                Chaque segment a son propre loading.tsx et error.tsx.
-              </p>
-              <div className="mt-4 text-primary text-sm font-medium">
-                Explorer →
-              </div>
+            <Link href="/photos" className="btn-secondary interactive">
+              View Photos
             </Link>
           </div>
+        </section>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
-            {[
-              { label: 'Route Groups', value: '2' },
-              { label: 'Parallel Slots', value: '2' },
-              { label: 'Intercepting Routes', value: '1' },
-              { label: 'Server Actions', value: '1' },
-            ].map((stat, idx) => (
+        {/* Concepts Grid */}
+        <section className="mb-24">
+          <div className="flex flex-wrap justify-center gap-3 animate-fadeInUp opacity-0 stagger-5">
+            {concepts.map((concept) => (
               <div
-                key={idx}
-                className="glass p-6 rounded-xl border border-border text-center"
+                key={concept.label}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-full hover:border-black transition-colors"
               >
-                <div className="text-4xl font-light mb-2 gradient-text">{stat.value}</div>
-                <div className="text-sm text-foreground/60">{stat.label}</div>
+                <span className="text-sm text-gray-600">{concept.label}</span>
+                <code className="text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">
+                  {concept.code}
+                </code>
               </div>
             ))}
           </div>
-        </div>
-      </main>
+        </section>
+
+        {/* Features Grid */}
+        <section className="mb-24">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Routing Patterns</h2>
+            <p className="text-gray-600">
+              Interactive demonstrations of each routing concept
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {features.map((feature, index) => (
+              <Link
+                key={feature.title}
+                href={feature.href}
+                className="card-interactive group animate-fadeInUp opacity-0"
+                style={{ animationDelay: `${0.6 + index * 0.1}s` }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-black group-hover:text-white transition-colors">
+                    <feature.icon className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-gray-600 text-sm">{feature.description}</p>
+                  </div>
+                  <IconArrowRight className="w-5 h-5 text-gray-400 group-hover:text-black group-hover:translate-x-1 transition-all" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Architecture Preview */}
+        <section className="mb-24">
+          <div className="card p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-3 h-3 rounded-full bg-red-400" />
+              <div className="w-3 h-3 rounded-full bg-yellow-400" />
+              <div className="w-3 h-3 rounded-full bg-green-400" />
+              <span className="text-sm text-gray-400 ml-4 font-mono">app/</span>
+            </div>
+            
+            <pre className="text-sm font-mono text-gray-700 overflow-x-auto">
+              <code>{`app/
+├── layout.tsx          # Root Layout (required)
+├── template.tsx        # Page transitions
+├── page.tsx            # Home page
+├── loading.tsx         # Loading UI
+├── error.tsx           # Error boundary
+├── not-found.tsx       # 404 page
+│
+├── (dashboard)/        # Route Group
+│   ├── layout.tsx      # Dashboard layout
+│   ├── page.tsx        # /dashboard
+│   ├── @analytics/     # Parallel Route slot
+│   └── @team/          # Parallel Route slot
+│
+├── (marketing)/        # Route Group
+│   └── marketing/
+│
+└── photos/
+    ├── [id]/           # Dynamic Route
+    └── (.)photo/[id]/  # Intercepting Route`}</code>
+            </pre>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="text-center">
+          <div className="card bg-black text-white p-12">
+            <h2 className="text-3xl font-bold mb-4">Ready to explore?</h2>
+            <p className="text-gray-400 mb-8 max-w-md mx-auto">
+              Navigate through the application to see each routing pattern in action.
+            </p>
+            <Link 
+              href="/dashboard" 
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-100 transition-colors interactive"
+            >
+              Start Exploring
+              <IconArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+      </div>
     </div>
   )
 }

@@ -1,21 +1,24 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Template({ children }: { children: React.ReactNode }) {
+  const [isVisible, setIsVisible] = useState(false)
+
   useEffect(() => {
-    // Animation d'entrée pour les transitions de route
-    document.body.style.opacity = '0'
-    const timer = setTimeout(() => {
-      document.body.style.transition = 'opacity 0.3s ease-in-out'
-      document.body.style.opacity = '1'
-    }, 10)
-    
-    return () => {
-      clearTimeout(timer)
-      document.body.style.opacity = '1'
-    }
+    setIsVisible(true)
+    return () => setIsVisible(false)
   }, [])
 
-  return <>{children}</>
+  return (
+    <div
+      className={`transition-all duration-500 ease-out ${
+        isVisible 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-5'
+      }`}
+    >
+      {children}
+    </div>
+  )
 }

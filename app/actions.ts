@@ -1,82 +1,59 @@
-/**
- * SERVER ACTIONS - Next.js 15
- * 
- * CONCEPT CLÉ : Server Actions
- * 
- * Les Server Actions permettent d'exécuter du code côté serveur directement
- * depuis les composants clients, sans avoir besoin de créer des API Routes.
- * 
- * DIRECTIVE 'use server' :
- * - Marque ce fichier comme contenant uniquement des Server Actions
- * - Toutes les fonctions exportées deviennent des Server Actions
- * - Alternative : Ajouter 'use server' au début d'une fonction individuelle
- * 
- * AVANTAGES :
- * 1. Type-safe : TypeScript fonctionne de bout en bout
- * 2. Pas d'API Routes : Pas besoin de créer /api/endpoints
- * 3. Sécurité : Le code s'exécute uniquement sur le serveur
- * 4. Simplicité : Appel direct depuis les composants clients
- * 
- * REVALIDATION DU CACHE :
- * - revalidatePath() : Invalide le cache pour un chemin spécifique
- * - revalidateTag() : Invalide le cache pour des tags spécifiques
- * - Utile après des mutations (POST, PUT, DELETE)
- * 
- * UTILISATION :
- * - Appeler depuis un Client Component avec useTransition()
- * - Gérer les états de chargement avec isPending
- * - Gérer les erreurs avec try/catch
- */
-
 'use server'
 
 import { revalidatePath } from 'next/cache'
 
-export interface FormData {
-  name: string
-  email: string
+interface ContactFormState {
+  success: boolean
   message: string
+  errors?: {
+    name?: string
+    email?: string
+    message?: string
+  }
 }
 
-/**
- * Server Action pour soumettre le formulaire de contact
- * 
- * Cette fonction :
- * 1. S'exécute uniquement sur le serveur
- * 2. Valide les données
- * 3. Traite la soumission (simulation ici)
- * 4. Revalide le cache pour mettre à jour la page
- * 
- * @param formData - Les données du formulaire
- * @returns Un objet avec success et message/error
- */
-export async function submitContactForm(formData: FormData) {
-  // Simuler un traitement asynchrone (ex: sauvegarde en DB)
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+export async function submitContactForm(
+  prevState: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 1500))
 
-  // Validation côté serveur (toujours valider côté serveur !)
-  if (!formData.name || !formData.email || !formData.message) {
+  const name = formData.get('name') as string
+  const email = formData.get('email') as string
+  const message = formData.get('message') as string
+
+  // Validation
+  const errors: ContactFormState['errors'] = {}
+
+  if (!name || name.length < 2) {
+    errors.name = 'Name must be at least 2 characters'
+  }
+
+  if (!email || !email.includes('@')) {
+    errors.email = 'Please enter a valid email address'
+  }
+
+  if (!message || message.length < 10) {
+    errors.message = 'Message must be at least 10 characters'
+  }
+
+  if (Object.keys(errors).length > 0) {
     return {
       success: false,
-      error: 'Tous les champs sont requis',
+      message: 'Validation failed',
+      errors,
     }
   }
 
-  // Dans une vraie application, on sauvegarderait ici :
-  // await db.contact.create({ data: formData })
-  // ou
-  // await fetch('https://api.example.com/contact', { method: 'POST', body: JSON.stringify(formData) })
-  console.log('Form submitted:', formData)
+  // Simulate saving to database
+  console.log('Form submitted:', { name, email, message })
 
-  // REVALIDATION DU CACHE
-  // Après une mutation, on doit invalider le cache pour que Next.js
-  // régénère la page avec les nouvelles données au prochain accès
+  // Revalidate the path to refresh any cached data
   revalidatePath('/dashboard/contact')
-  
-  // Alternative : revalidateTag('contacts') si on utilise des tags
 
   return {
     success: true,
-    message: 'Formulaire envoyé avec succès !',
+    message: 'Thank you for your message. We will get back to you soon.',
   }
 }

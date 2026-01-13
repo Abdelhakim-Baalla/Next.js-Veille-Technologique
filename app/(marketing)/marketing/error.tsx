@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
-import { IconWarning, IconRefresh, IconHome } from './components/icons'
+import { IconWarning, IconRefresh, IconHome } from '../../components/icons'
 import Link from 'next/link'
 
-export default function Error({
+export default function MarketingError({
   error,
   reset,
 }: {
@@ -16,32 +16,18 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen pt-28 pb-20 flex items-center justify-center">
+    <div className="py-20 flex items-center justify-center">
       <div className="max-w-md w-full mx-auto px-6 text-center">
         <div className="card p-12">
-          {/* Icon */}
           <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-red-50 flex items-center justify-center">
             <IconWarning className="w-8 h-8 text-red-500" />
           </div>
 
-          {/* Title */}
           <h1 className="text-2xl font-bold mb-3">Something went wrong</h1>
-          
-          {/* Description */}
           <p className="text-gray-600 mb-8">
-            An unexpected error occurred. This is an example of the error.tsx boundary in action.
+            An error occurred in the marketing section.
           </p>
 
-          {/* Error Details */}
-          {error.digest && (
-            <div className="mb-8 p-3 bg-gray-50 rounded-lg">
-              <code className="text-xs font-mono text-gray-500">
-                Error ID: {error.digest}
-              </code>
-            </div>
-          )}
-
-          {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={reset}
@@ -56,11 +42,6 @@ export default function Error({
             </Link>
           </div>
         </div>
-
-        {/* Info */}
-        <p className="text-sm text-gray-400 mt-6">
-          This error boundary catches errors in this route segment
-        </p>
       </div>
     </div>
   )
