@@ -406,16 +406,18 @@ export default function SlidesPage() {
         </div>
       </div>
 
-      {/* Click zones for navigation - Invisible but functional */}
+      {/* Click zones for navigation - At bottom only to avoid blocking interactive elements */}
       <button
         onClick={prevSlide}
-        className="fixed left-0 top-0 bottom-0 w-1/4 z-40 opacity-0 cursor-none"
+        className="fixed left-0 bottom-0 w-1/4 h-20 z-40 opacity-0 cursor-none"
         disabled={currentSlide === 0}
+        aria-label="Slide précédente"
       />
       <button
         onClick={nextSlide}
-        className="fixed right-0 top-0 bottom-0 w-1/4 z-40 opacity-0 cursor-none"
+        className="fixed right-0 bottom-0 w-1/4 h-20 z-40 opacity-0 cursor-none"
         disabled={currentSlide === slides.length - 1}
+        aria-label="Slide suivante"
       />
 
       {/* Touch swipe indicator - Only on first load */}
