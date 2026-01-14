@@ -431,12 +431,12 @@ export function SlidePlayground() {
 
   const games = [
     { id: 'quiz', icon: Icons.target, title: 'Quiz Master', desc: '20 questions', color: 'bg-gradient-to-br from-purple-500 to-purple-600', badge: 'Popular' },
-    { id: 'random', icon: Icons.shuffle, title: 'Défi Aléatoire', desc: 'Mix de tout!', color: 'bg-gradient-to-br from-yellow-500 to-orange-500', badge: 'Hot' },
     { id: 'match', icon: Icons.link, title: 'Speed Match', desc: '12 paires', color: 'bg-gradient-to-br from-orange-500 to-orange-600', badge: null },
     { id: 'debug', icon: Icons.code, title: 'Debug Challenge', desc: '10 bugs', color: 'bg-gradient-to-br from-pink-500 to-pink-600', badge: null },
-    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '18 cartes', color: 'bg-gradient-to-br from-blue-500 to-blue-600', badge: null },
-    { id: 'speed', icon: Icons.zap, title: 'Speed Type', desc: '30s chrono', color: 'bg-gradient-to-br from-green-500 to-emerald-600', badge: null },
-    { id: 'sandbox', icon: Icons.terminal, title: 'Code Sandbox', desc: 'Pratique!', color: 'bg-gradient-to-br from-gray-700 to-gray-900', badge: 'New' },
+    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '18 cartes', color: 'bg-gradient-to-br from-cyan-500 to-blue-600', badge: null },
+    { id: 'speed', icon: Icons.terminal, title: 'Speed Type', desc: '30s chrono', color: 'bg-gradient-to-br from-green-500 to-emerald-600', badge: null },
+    { id: 'random', icon: Icons.shuffle, title: 'Défi Aléatoire', desc: 'Mix!', color: 'bg-gradient-to-br from-yellow-500 to-orange-500', badge: null },
+    { id: 'sandbox', icon: Icons.code, title: 'Code Sandbox', desc: 'Pratique!', color: 'bg-gradient-to-br from-gray-700 to-gray-900', badge: null },
   ]
 
   return (
@@ -444,6 +444,7 @@ export function SlidePlayground() {
       <Confetti active={showConfetti} />
       <AchievementToast achievement={currentAchievement} onClose={() => setCurrentAchievement(null)} />
       {activeGame === 'sandbox' && <CodeSandbox onClose={resetGame} />}
+
       <div className={`slide-content flex flex-col h-full py-6 ${darkMode ? 'text-white' : ''}`}>
         <div className="flex items-start justify-between mb-4">
           <div>
@@ -538,10 +539,13 @@ export function SlidePlayground() {
                       <div className="relative z-10 text-center">
                         {spinnerActive ? (
                           <span className="font-bold text-white text-base animate-pulse">{spinnerName}</span>
-                        ) : showSpinnerResult ? (
+                        ) : showSpinnerResult && selectedStudent ? (
                           <div>
-                            <span className="block text-white font-black text-lg">{selectedStudent?.split(' ')[0]}</span>
-                            <span className="text-[10px] text-gray-400">{selectedStudent?.split(' ')[1]}</span>
+                            <span className="block text-white font-black text-lg">{selectedStudent.split(' ')[0]}</span>
+                            <span className="text-[10px] text-gray-400">{selectedStudent.split(' ')[1]}</span>
+                            <span className={`block mt-1 text-[9px] font-bold ${teamA.includes(selectedStudent) ? 'text-red-400' : 'text-blue-400'}`}>
+                              {teamA.includes(selectedStudent) ? '🔴 Équipe A' : '🔵 Équipe B'}
+                            </span>
                           </div>
                         ) : (
                           <span className="text-gray-500 text-sm">Appuie pour sélectionner</span>
@@ -596,7 +600,7 @@ export function SlidePlayground() {
                     <h4 className="font-bold mb-4 text-lg">{quizQuestions[currentQuiz].question}</h4>
                     <div className="space-y-2">
                       {quizQuestions[currentQuiz].options.map((o, i) => (
-                        <button key={i} onClick={() => !quizAnswered && handleQuizAnswer(i)} disabled={quizAnswered} data-hover
+                        <button key={i} onClick={() => !quizAnswered && handleQuizAnswerWithTeam(i)} disabled={quizAnswered} data-hover
                           className={`w-full p-3 rounded-lg text-left text-sm transition-all flex items-center gap-3 ${quizAnswered ? i === quizQuestions[currentQuiz].correct ? 'bg-green-100 border-2 border-green-400 scale-[1.02]' : selectedAnswer === i ? 'bg-red-100 border-2 border-red-400 scale-95 opacity-70' : 'bg-white border border-gray-200 opacity-40 scale-95' : 'bg-white border border-gray-200 hover:border-black hover:scale-[1.01]'}`}>
                           <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${quizAnswered && i === quizQuestions[currentQuiz].correct ? 'bg-green-500 text-white' : quizAnswered && selectedAnswer === i ? 'bg-red-500 text-white' : 'bg-gray-100 text-black/50'}`}>{String.fromCharCode(65 + i)}</span>
                           <span className="flex-1">{o}</span>
