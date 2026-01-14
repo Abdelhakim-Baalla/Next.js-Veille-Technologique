@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 // Confetti Component
 function Confetti({ active }: { active: boolean }) {
