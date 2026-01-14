@@ -163,6 +163,20 @@ export function SlidePlayground() {
   const [randomIndex, setRandomIndex] = useState(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
+  // Classmate spinner system
+  const allClassmates = [
+    'Abdelhaq El Ghandor', 'Abdelillah Essemlali', 'Addar Abdellah', 'Ayoub Labit',
+    'Hamza Jaafar', 'Hamza Elboukri', 'Isam Chajia', 'Keltoum Malouki',
+    'Lahmidi Abderrahmane', 'Eddahmani Mohamed', 'Mohamed Follane', 'Mokhtari Mohamed',
+    'Mustapha Boukadia', 'Driss Nafiaa', 'Smail Najim', 'Solayman Jaafar',
+    'Yassine Hassani', 'Zakaria El Ouannasse'
+  ]
+  const [availableClassmates, setAvailableClassmates] = useState<string[]>([...allClassmates])
+  const [spinnerActive, setSpinnerActive] = useState(false)
+  const [spinnerName, setSpinnerName] = useState('')
+  const [selectedStudent, setSelectedStudent] = useState<string | null>(null)
+  const [showSpinnerResult, setShowSpinnerResult] = useState(false)
+
   const allAchievements = [
     { id: 'first_quiz', icon: '🎯', title: 'Premier Quiz', desc: 'Complète ton premier quiz' },
     { id: 'perfect_score', icon: '💯', title: 'Score Parfait', desc: '100% de bonnes réponses' },
@@ -337,7 +351,54 @@ export function SlidePlayground() {
       setStreak(0)
     }
   }
-  const nextQuiz = () => { if (currentQuiz < quizQuestions.length - 1) { setCurrentQuiz(c => c + 1); setQuizAnswered(false); setSelectedAnswer(null) } }
+  const nextQuiz = () => { 
+    if (currentQuiz < quizQuestions.length - 1) { 
+      setCurrentQuiz(c => c + 1)
+      setQuizAnswered(false)
+      setSelectedAnswer(null)
+      setSelectedStudent(null)
+      setShowSpinnerResult(false)
+    } 
+  }
+  
+  // Spinner function for selecting classmates
+  const spinForStudent = () => {
+    if (availableClassmates.length === 0 || spinnerActive) return
+    
+    setSpinnerActive(true)
+    setShowSpinnerResult(false)
+    setSelectedStudent(null)
+    
+    let iterations = 0
+    const maxIterations = 25 + Math.floor(Math.random() * 15) // 25-40 iterations
+    const baseSpeed = 50
+    
+    const spin = () => {
+      const randomIdx = Math.floor(Math.random() * availableClassmates.length)
+      setSpinnerName(availableClassmates[randomIdx])
+      iterations++
+      
+      if (iterations < maxIterations) {
+        // Speed decreases as we approach the end (slower at the end for dramatic effect)
+        const speed = baseSpeed + Math.pow(iterations / maxIterations, 2) * 200
+        setTimeout(spin, speed)
+      } else {
+        // Final selection
+        const finalIdx = Math.floor(Math.random() * availableClassmates.length)
+        const selected = availableClassmates[finalIdx]
+        setSpinnerName(selected)
+        setSelectedStudent(selected)
+        setShowSpinnerResult(true)
+        setSpinnerActive(false)
+        
+        // Remove from available list
+        setAvailableClassmates(prev => prev.filter(name => name !== selected))
+      }
+    }
+    
+    spin()
+  }
+
   const handleMatch = (side: 'left' | 'right', idx: number) => {
     if (matchedPairs.includes(idx)) return
     if (!selectedMatch) { setSelectedMatch({ side, index: idx }) }
@@ -348,7 +409,11 @@ export function SlidePlayground() {
       setSelectedMatch(null)
     }
   }
-  const resetGame = () => { setActiveGame('menu'); setQuizScore(0); setCurrentQuiz(0); setQuizAnswered(false); setSelectedAnswer(null); setCurrentCard(0); setFlipped(false); setMatchedPairs([]); setSelectedMatch(null); setDebugStep(0); setShowDebugAnswer(false); setStreak(0); setTimeLeft(30); setSpeedRound(0); setSpeedScore(0); setRandomIndex(0); setShowConfetti(false) }
+  const resetGame = () => { 
+    setActiveGame('menu'); setQuizScore(0); setCurrentQuiz(0); setQuizAnswered(false); setSelectedAnswer(null); setCurrentCard(0); setFlipped(false); setMatchedPairs([]); setSelectedMatch(null); setDebugStep(0); setShowDebugAnswer(false); setStreak(0); setTimeLeft(30); setSpeedRound(0); setSpeedScore(0); setRandomIndex(0); setShowConfetti(false)
+    // Reset spinner states
+    setSelectedStudent(null); setShowSpinnerResult(false); setSpinnerName(''); setAvailableClassmates([...allClassmates])
+  }
 
   // Check quiz completion for achievements and confetti
   const handleQuizComplete = () => {
@@ -445,10 +510,82 @@ export function SlidePlayground() {
               <div className="flex items-center gap-3">
                 <div className="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] rounded-full font-medium">{quizQuestions[currentQuiz]?.category}</div>
                 <div className="px-3 py-1 bg-black text-white text-xs rounded-full font-mono">{quizScore}/{quizQuestions.length}</div>
+                <div className="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] rounded-full font-medium">👥 {availableClassmates.length} restants</div>
               </div>
             </div>
             {currentQuiz < quizQuestions.length && (
               <div className="flex-1 flex gap-4">
+                {/* Student Spinner Panel - Minimal Dark Theme */}
+                <div className="w-52 flex flex-col gap-2">
+                  <div className={`p-4 rounded-2xl transition-all duration-300 ${showSpinnerResult ? 'bg-black' : 'bg-gray-900'}`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Répondant</span>
+                      <span className="text-[10px] text-gray-600 font-mono">{availableClassmates.length} restants</span>
+                    </div>
+                    
+                    {/* Spinner Display - Sleek Dark */}
+                    <div className={`relative h-20 mb-4 rounded-xl overflow-hidden flex items-center justify-center border ${spinnerActive ? 'border-white/30' : showSpinnerResult ? 'border-white' : 'border-gray-700'}`}>
+                      {spinnerActive && (
+                        <div className="absolute inset-0">
+                          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                        </div>
+                      )}
+                      {showSpinnerResult && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+                      )}
+                      <div className="relative z-10 text-center">
+                        {spinnerActive ? (
+                          <span className="font-bold text-white text-base animate-pulse">{spinnerName}</span>
+                        ) : showSpinnerResult ? (
+                          <div>
+                            <span className="block text-white font-black text-lg">{selectedStudent?.split(' ')[0]}</span>
+                            <span className="text-[10px] text-gray-400">{selectedStudent?.split(' ')[1]}</span>
+                          </div>
+                        ) : (
+                          <span className="text-gray-500 text-sm">Appuie pour sélectionner</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Spin Button - Minimal */}
+                    <button 
+                      onClick={spinForStudent} 
+                      disabled={spinnerActive || availableClassmates.length === 0 || showSpinnerResult}
+                      data-hover
+                      className={`w-full p-3 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
+                        spinnerActive ? 'bg-white/10 text-white cursor-wait' : 
+                        showSpinnerResult ? 'bg-white text-black' :
+                        availableClassmates.length === 0 ? 'bg-gray-800 text-gray-600 cursor-not-allowed' :
+                        'bg-white text-black hover:bg-gray-100'
+                      }`}
+                    >
+                      {spinnerActive ? (
+                        <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sélection...</>
+                      ) : showSpinnerResult ? (
+                        <><Icons.check className="w-4 h-4" /> {selectedStudent?.split(' ')[0]} répond</>
+                      ) : availableClassmates.length === 0 ? (
+                        <>Terminé</>
+                      ) : (
+                        <><Icons.shuffle className="w-4 h-4" /> Spin</>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* Participants List - Compact */}
+                  <div className="p-3 bg-gray-50 rounded-xl">
+                    <div className="flex flex-wrap gap-1">
+                      {availableClassmates.slice(0, 6).map((name, i) => (
+                        <span key={i} className="px-2 py-0.5 bg-white rounded text-[9px] border border-gray-200 text-gray-600">{name.split(' ')[0]}</span>
+                      ))}
+                      {availableClassmates.length > 6 && (
+                        <span className="px-2 py-0.5 bg-black text-white rounded text-[9px]">+{availableClassmates.length - 6}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Question Card */}
                 <div className="flex-1 flex items-center justify-center">
                   <div className="w-full max-w-md p-6 bg-gray-50 rounded-xl border border-gray-200">
