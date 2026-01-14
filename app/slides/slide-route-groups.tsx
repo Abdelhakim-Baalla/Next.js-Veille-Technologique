@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideRouteGroups() {
   const [isVisible, setIsVisible] = useState(false)
@@ -74,24 +75,9 @@ export function SlideRouteGroups() {
                 <span className="code-title text-xs">Structure de dossiers avec groupes</span>
               </div>
               <div className="code-body flex-1 !p-4">
-                <pre className="text-xs leading-relaxed">{`app/
-├── <span class="text-blue-500 font-bold">(marketing)/</span>          ← Groupe invisible
-│   ├── layout.tsx        ← Layout header public
-│   ├── page.tsx          → /
-│   ├── about/page.tsx    → /about
-│   └── pricing/page.tsx  → /pricing
-│
-├── <span class="text-purple-500 font-bold">(dashboard)/</span>          ← Layout différent!
-│   ├── layout.tsx        ← Layout sidebar
-│   ├── page.tsx          → /dashboard
-│   ├── settings/page.tsx → /settings
-│   └── @analytics/       ← Parallel route
-│       └── page.tsx
-│
-└── <span class="text-green-500 font-bold">(auth)/</span>                ← Layout centré
-    ├── layout.tsx        ← Layout minimal
-    ├── login/page.tsx    → /login
-    └── register/page.tsx → /register`}</pre>
+                <pre className="text-xs leading-relaxed">
+                  <span className="text-gray-400">app/</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-blue-400 font-bold">(marketing)/</span>          <span className="text-green-500 italic">← Groupe invisible</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-emerald-400">layout.tsx</span>        <span className="text-green-500 italic">← Layout header public</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-sky-400">page.tsx</span>          <span className="text-amber-400">→ /</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-purple-400">about/</span><span className="text-sky-400">page.tsx</span>    <span className="text-amber-400">→ /about</span>{`\n`}<span className="text-gray-400">│   └──</span> <span className="text-purple-400">pricing/</span><span className="text-sky-400">page.tsx</span>  <span className="text-amber-400">→ /pricing</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-purple-400 font-bold">(dashboard)/</span>          <span className="text-green-500 italic">← Layout différent!</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-emerald-400">layout.tsx</span>        <span className="text-green-500 italic">← Layout sidebar</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-sky-400">page.tsx</span>          <span className="text-amber-400">→ /dashboard</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-purple-400">settings/</span><span className="text-sky-400">page.tsx</span> <span className="text-amber-400">→ /settings</span>{`\n`}<span className="text-gray-400">│   └──</span> <span className="text-cyan-400">@analytics/</span>       <span className="text-green-500 italic">← Parallel route</span>{`\n`}<span className="text-gray-400">│       └──</span> <span className="text-sky-400">page.tsx</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">└──</span> <span className="text-green-400 font-bold">(auth)/</span>                <span className="text-green-500 italic">← Layout centré</span>{`\n`}<span className="text-gray-400">    ├──</span> <span className="text-emerald-400">layout.tsx</span>        <span className="text-green-500 italic">← Layout minimal</span>{`\n`}<span className="text-gray-400">    ├──</span> <span className="text-purple-400">login/</span><span className="text-sky-400">page.tsx</span>    <span className="text-amber-400">→ /login</span>{`\n`}<span className="text-gray-400">    └──</span> <span className="text-purple-400">register/</span><span className="text-sky-400">page.tsx</span> <span className="text-amber-400">→ /register</span>
+                </pre>
               </div>
             </div>
           </div>

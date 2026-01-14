@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideServerClient() {
   const [isVisible, setIsVisible] = useState(false)
@@ -88,31 +89,7 @@ export function SlideServerClient() {
                     <span className="code-title text-xs">app/users/page.tsx (Server Component)</span>
                   </div>
                   <div className="code-body !p-4 flex-1">
-                    <pre className="text-xs leading-relaxed">{`// Pas de directive = Server Component par défaut
-import { db } from '@/lib/db'
-
-// Accès direct à la base de données !
-async function getUsers() {
-  return await db.user.findMany({
-    select: { id: true, name: true, email: true }
-  })
-}
-
-export default async function UsersPage() {
-  // Pas besoin d'API route, pas de useEffect
-  const users = await getUsers()
-  
-  return (
-    <div>
-      <h1>Utilisateurs ({users.length})</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
-    </div>
-  )
-}`}</pre>
+                    <SyntaxHighlighter code={`// Pas de directive = Server Component par défaut\nimport { db } from '@/lib/db'\n\n// Accès direct à la base de données !\nasync function getUsers() {\n  return await db.user.findMany({\n    select: { id: true, name: true, email: true }\n  })\n}\n\nexport default async function UsersPage() {\n  // Pas besoin d'API route, pas de useEffect\n  const users = await getUsers()\n  \n  return (\n    <div>\n      <h1>Utilisateurs ({users.length})</h1>\n      <ul>\n        {users.map(user => (\n          <li key={user.id}>{user.name}</li>\n        ))}\n      </ul>\n    </div>\n  )\n}`} />
                   </div>
                 </div>
               </div>
@@ -178,28 +155,7 @@ export default async function UsersPage() {
                     <span className="code-title text-xs">components/counter.tsx</span>
                   </div>
                   <div className="code-body !p-4 flex-1">
-                    <pre className="text-xs leading-relaxed">{`'use client'  // ← Directive obligatoire !
-
-import { useState } from 'react'
-
-export function Counter() {
-  // useState = interactivité = Client Component
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="p-4 bg-gray-50 rounded-xl">
-      <p className="text-2xl font-bold">{count}</p>
-      <button 
-        onClick={() => setCount(c => c + 1)}
-        className="mt-2 px-4 py-2 bg-black text-white rounded-lg"
-      >
-        +1
-      </button>
-    </div>
-  )
-}
-
-// Ce code est dans le bundle client JS`}</pre>
+                    <SyntaxHighlighter code={`'use client'  // ← Directive obligatoire !\n\nimport { useState } from 'react'\n\nexport function Counter() {\n  // useState = interactivité = Client Component\n  const [count, setCount] = useState(0)\n\n  return (\n    <div className="p-4 bg-gray-50 rounded-xl">\n      <p className="text-2xl font-bold">{count}</p>\n      <button \n        onClick={() => setCount(c => c + 1)}\n        className="mt-2 px-4 py-2 bg-black text-white rounded-lg"\n      >\n        +1\n      </button>\n    </div>\n  )\n}\n\n// Ce code est dans le bundle client JS`} />
                   </div>
                 </div>
               </div>
@@ -220,28 +176,7 @@ export function Counter() {
                     <span className="code-title text-xs">Composition hybride</span>
                   </div>
                   <div className="code-body !p-3 flex-1">
-                    <pre className="text-xs leading-relaxed">{`// page.tsx (Server)
-import { db } from '@/lib/db'
-import { Chart } from './chart'
-
-export default async function Page() {
-  // Fetch côté serveur
-  const data = await db.analytics.get()
-  
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      {/* Pass data au Client */}
-      <Chart data={data} />
-    </div>
-  )
-}
-
-// chart.tsx (Client)
-'use client'
-export function Chart({ data }) {
-  // Interactivité avec data pré-fetché
-}`}</pre>
+                    <SyntaxHighlighter code={`// page.tsx (Server)\nimport { db } from '@/lib/db'\nimport { Chart } from './chart'\n\nexport default async function Page() {\n  // Fetch côté serveur\n  const data = await db.analytics.get()\n  \n  return (\n    <div>\n      <h1>Dashboard</h1>\n      {/* Pass data au Client */}\n      <Chart data={data} />\n    </div>\n  )\n}\n\n// chart.tsx (Client)\n'use client'\nexport function Chart({ data }) {\n  // Interactivité avec data pré-fetché\n}`} />
                   </div>
                 </div>
               </div>

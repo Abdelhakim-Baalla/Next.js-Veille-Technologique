@@ -543,9 +543,6 @@ export function SlidePlayground() {
                           <div>
                             <span className="block text-white font-black text-lg">{selectedStudent.split(' ')[0]}</span>
                             <span className="text-[10px] text-gray-400">{selectedStudent.split(' ')[1]}</span>
-                            <span className={`block mt-1 text-[9px] font-bold ${teamA.includes(selectedStudent) ? 'text-red-400' : 'text-blue-400'}`}>
-                              {teamA.includes(selectedStudent) ? '🔴 Équipe A' : '🔵 Équipe B'}
-                            </span>
                           </div>
                         ) : (
                           <span className="text-gray-500 text-sm">Appuie pour sélectionner</span>
@@ -600,7 +597,7 @@ export function SlidePlayground() {
                     <h4 className="font-bold mb-4 text-lg">{quizQuestions[currentQuiz].question}</h4>
                     <div className="space-y-2">
                       {quizQuestions[currentQuiz].options.map((o, i) => (
-                        <button key={i} onClick={() => !quizAnswered && handleQuizAnswerWithTeam(i)} disabled={quizAnswered} data-hover
+                        <button key={i} onClick={() => !quizAnswered && handleQuizAnswer(i)} disabled={quizAnswered} data-hover
                           className={`w-full p-3 rounded-lg text-left text-sm transition-all flex items-center gap-3 ${quizAnswered ? i === quizQuestions[currentQuiz].correct ? 'bg-green-100 border-2 border-green-400 scale-[1.02]' : selectedAnswer === i ? 'bg-red-100 border-2 border-red-400 scale-95 opacity-70' : 'bg-white border border-gray-200 opacity-40 scale-95' : 'bg-white border border-gray-200 hover:border-black hover:scale-[1.01]'}`}>
                           <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${quizAnswered && i === quizQuestions[currentQuiz].correct ? 'bg-green-500 text-white' : quizAnswered && selectedAnswer === i ? 'bg-red-500 text-white' : 'bg-gray-100 text-black/50'}`}>{String.fromCharCode(65 + i)}</span>
                           <span className="flex-1">{o}</span>
@@ -696,7 +693,7 @@ export function SlidePlayground() {
             </div>
             <div className="flex-1 flex items-center justify-center">
               <div className="w-full max-w-2xl">
-                <div className="bg-gray-900 rounded-xl p-4 mb-4"><pre className="text-sm text-gray-300 font-mono whitespace-pre-wrap">{debugChallenges[debugStep].code}</pre></div>
+                <div className="bg-gray-900 rounded-xl p-4 mb-4"><SyntaxHighlighter code={debugChallenges[debugStep].code} /></div>
                 <div className="flex items-center gap-2 mb-4"><div className="w-6 h-6 rounded bg-red-100 flex items-center justify-center"><Icons.search className="w-3 h-3 text-red-600" /></div><span className="text-sm font-medium">Trouve l'erreur</span></div>
                 {!showDebugAnswer ? (
                   <button onClick={() => setShowDebugAnswer(true)} data-hover className="w-full p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium hover:bg-yellow-200">Révéler</button>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideAppRouter() {
   const [isVisible, setIsVisible] = useState(false)
@@ -83,24 +84,26 @@ export function SlideAppRouter() {
                 <span className="code-title text-xs">Structure app/</span>
               </div>
               <div className="code-body flex-1 !p-3">
-                <pre className="text-[10px] leading-relaxed">{`app/
-├── layout.tsx      ← Layout racine (RSC)
-├── page.tsx        ← Route /
-├── loading.tsx     ← Suspense automatique
-├── error.tsx       ← Error Boundary
-├── not-found.tsx   ← 404 personnalisé
-│
-├── blog/
-│   ├── layout.tsx  ← Layout imbriqué
-│   ├── page.tsx    ← /blog
-│   └── [slug]/
-│       ├── page.tsx    ← /blog/:slug
-│       ├── loading.tsx ← Loading spécifique
-│       └── error.tsx   ← Error spécifique
-│
-└── (marketing)/    ← Route Group
-    ├── about/
-    └── contact/`}</pre>
+                <pre className="text-[10px] leading-relaxed">
+                  <span className="text-gray-400">app/</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-emerald-400">layout.tsx</span>      <span className="text-green-500 italic">← Layout racine (RSC)</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-sky-400">page.tsx</span>        <span className="text-green-500 italic">← Route /</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-yellow-400">loading.tsx</span>     <span className="text-green-500 italic">← Suspense automatique</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-red-400">error.tsx</span>       <span className="text-green-500 italic">← Error Boundary</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-orange-400">not-found.tsx</span>   <span className="text-green-500 italic">← 404 personnalisé</span>{`
+`}<span className="text-gray-400">│</span>{`
+`}<span className="text-gray-400">├──</span> <span className="text-purple-400">blog/</span>{`
+`}<span className="text-gray-400">│   ├──</span> <span className="text-emerald-400">layout.tsx</span>  <span className="text-green-500 italic">← Layout imbriqué</span>{`
+`}<span className="text-gray-400">│   ├──</span> <span className="text-sky-400">page.tsx</span>    <span className="text-green-500 italic">← /blog</span>{`
+`}<span className="text-gray-400">│   └──</span> <span className="text-cyan-400">[slug]/</span>{`
+`}<span className="text-gray-400">│       ├──</span> <span className="text-sky-400">page.tsx</span>    <span className="text-green-500 italic">← /blog/:slug</span>{`
+`}<span className="text-gray-400">│       ├──</span> <span className="text-yellow-400">loading.tsx</span> <span className="text-green-500 italic">← Loading spécifique</span>{`
+`}<span className="text-gray-400">│       └──</span> <span className="text-red-400">error.tsx</span>   <span className="text-green-500 italic">← Error spécifique</span>{`
+`}<span className="text-gray-400">│</span>{`
+`}<span className="text-gray-400">└──</span> <span className="text-amber-400">(marketing)/</span>    <span className="text-green-500 italic">← Route Group</span>{`
+`}<span className="text-gray-400">    ├──</span> <span className="text-purple-400">about/</span>{`
+`}<span className="text-gray-400">    └──</span> <span className="text-purple-400">contact/</span>
+                </pre>
               </div>
             </div>
           </div>

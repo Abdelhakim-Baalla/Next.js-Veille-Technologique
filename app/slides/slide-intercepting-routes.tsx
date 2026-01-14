@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideInterceptingRoutes() {
   const [isVisible, setIsVisible] = useState(false)
@@ -155,20 +156,9 @@ export function SlideInterceptingRoutes() {
                 <span className="code-title text-xs">Structure Modal Photo</span>
               </div>
               <div className="code-body !p-3 flex-1">
-                <pre className="text-xs leading-relaxed">{`app/
-├── layout.tsx
-│   {/* Contient {modal} slot */}
-│
-├── @modal/
-│   ├── default.tsx     {/* return null */}
-│   └── (.)photos/
-│       └── [id]/
-│           └── page.tsx {/* Modal! */}
-│
-└── photos/
-    ├── page.tsx        {/* Grille */}
-    └── [id]/
-        └── page.tsx    {/* Page full */}`}</pre>
+                <pre className="text-xs leading-relaxed">
+                  <span className="text-gray-400">app/</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-emerald-400">layout.tsx</span>{`\n`}<span className="text-gray-400">│</span>   <span className="text-green-500 italic">{/* Contient {'{modal}'} slot */}</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-purple-400 font-bold">@modal/</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-orange-400">default.tsx</span>     <span className="text-green-500 italic">{/* return null */}</span>{`\n`}<span className="text-gray-400">│   └──</span> <span className="text-amber-400 font-bold">(.)photos/</span>{`\n`}<span className="text-gray-400">│       └──</span> <span className="text-cyan-400">[id]/</span>{`\n`}<span className="text-gray-400">│           └──</span> <span className="text-sky-400">page.tsx</span> <span className="text-green-500 italic">{/* Modal! */}</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">└──</span> <span className="text-purple-400">photos/</span>{`\n`}<span className="text-gray-400">    ├──</span> <span className="text-sky-400">page.tsx</span>        <span className="text-green-500 italic">{/* Grille */}</span>{`\n`}<span className="text-gray-400">    └──</span> <span className="text-cyan-400">[id]/</span>{`\n`}<span className="text-gray-400">        └──</span> <span className="text-sky-400">page.tsx</span>    <span className="text-green-500 italic">{/* Page full */}</span>
+                </pre>
               </div>
             </div>
 
@@ -181,17 +171,7 @@ export function SlideInterceptingRoutes() {
                 <span className="code-title text-xs">layout.tsx</span>
               </div>
               <div className="code-body !p-3">
-                <pre className="text-xs">{`export default function Layout({
-  children,
-  modal  // @modal slot
-}) {
-  return (
-    <>
-      {children}
-      {modal} {/* Overlay quand actif */}
-    </>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`export default function Layout({\n  children,\n  modal  // @modal slot\n}) {\n  return (\n    <>\n      {children}\n      {modal} {/* Overlay quand actif */}\n    </>\n  )\n}`} />
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideLayoutTemplate() {
   const [isVisible, setIsVisible] = useState(false)
@@ -150,7 +151,7 @@ export function SlideLayoutTemplate() {
                 </span>
               </div>
               <div className="code-body flex-1 !p-4">
-                <pre className="text-xs leading-relaxed">{showLayout 
+                <SyntaxHighlighter code={showLayout 
 ? `// Layout : l'état persiste entre navigations
 export default function DashboardLayout({
   children
@@ -187,7 +188,7 @@ export default function DashboardTemplate({
       {children}  {/* Animation d'entrée à chaque page */}
     </div>
   )
-}`}</pre>
+}`} />
               </div>
             </div>
           </div>

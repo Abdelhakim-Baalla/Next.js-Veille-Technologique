@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideLoadingStates() {
   const [isVisible, setIsVisible] = useState(false)
@@ -76,9 +77,7 @@ export function SlideLoadingStates() {
             {/* Equivalent Code */}
             <div className="p-3 border-2 border-dashed border-gray-200 rounded-xl">
               <p className="text-xs font-mono text-black/40 mb-1">Équivalent React :</p>
-              <pre className="text-xs text-black/60">{`<Suspense fallback={<Loading/>}>
-  <Page />
-</Suspense>`}</pre>
+              <SyntaxHighlighter code={`<Suspense fallback={<Loading/>}>\n  <Page />\n</Suspense>`} />
             </div>
           </div>
 
@@ -93,28 +92,7 @@ export function SlideLoadingStates() {
                 <span className="code-title text-xs">app/dashboard/loading.tsx</span>
               </div>
               <div className="code-body !p-4 flex-1">
-                <pre className="text-xs leading-relaxed">{`// Affiché automatiquement pendant le chargement
-export default function Loading() {
-  return (
-    <div className="animate-pulse space-y-4">
-      {/* Skeleton Header */}
-      <div className="h-8 bg-gray-200 rounded w-1/3" />
-      
-      {/* Skeleton Content */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="h-24 bg-gray-200 rounded-xl" />
-        <div className="h-24 bg-gray-200 rounded-xl" />
-        <div className="h-24 bg-gray-200 rounded-xl" />
-      </div>
-      
-      {/* Skeleton Table */}
-      <div className="space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-full" />
-        <div className="h-4 bg-gray-200 rounded w-2/3" />
-      </div>
-    </div>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`// Affiché automatiquement pendant le chargement\nexport default function Loading() {\n  return (\n    <div className="animate-pulse space-y-4">\n      {/* Skeleton Header */}\n      <div className="h-8 bg-gray-200 rounded w-1/3" />\n      \n      {/* Skeleton Content */}\n      <div className="grid grid-cols-3 gap-4">\n        <div className="h-24 bg-gray-200 rounded-xl" />\n        <div className="h-24 bg-gray-200 rounded-xl" />\n        <div className="h-24 bg-gray-200 rounded-xl" />\n      </div>\n      \n      {/* Skeleton Table */}\n      <div className="space-y-2">\n        <div className="h-4 bg-gray-200 rounded w-full" />\n        <div className="h-4 bg-gray-200 rounded w-2/3" />\n      </div>\n    </div>\n  )\n}`} />
               </div>
             </div>
 
@@ -169,26 +147,7 @@ export default function Loading() {
                 <span className="code-title text-xs">Chargement par composant</span>
               </div>
               <div className="code-body !p-3 flex-1">
-                <pre className="text-xs leading-relaxed">{`import { Suspense } from 'react'
-
-export default function Page() {
-  return (
-    <div className="grid gap-4">
-      {/* Chaque section indépendante */}
-      <Suspense fallback={<ProfileSkeleton />}>
-        <UserProfile />
-      </Suspense>
-      
-      <Suspense fallback={<ChartSkeleton />}>
-        <Analytics />  {/* Peut être lent */}
-      </Suspense>
-      
-      <Suspense fallback={<TableSkeleton />}>
-        <DataTable />
-      </Suspense>
-    </div>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`import { Suspense } from 'react'\n\nexport default function Page() {\n  return (\n    <div className="grid gap-4">\n      {/* Chaque section indépendante */}\n      <Suspense fallback={<ProfileSkeleton />}>\n        <UserProfile />\n      </Suspense>\n      \n      <Suspense fallback={<ChartSkeleton />}>\n        <Analytics />  {/* Peut être lent */}\n      </Suspense>\n      \n      <Suspense fallback={<TableSkeleton />}>\n        <DataTable />\n      </Suspense>\n    </div>\n  )\n}`} />
               </div>
             </div>
 

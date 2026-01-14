@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideServerActions() {
   const [isVisible, setIsVisible] = useState(false)
@@ -88,26 +89,7 @@ export function SlideServerActions() {
                   <span className="code-title text-xs">1. Inline dans composant</span>
                 </div>
                 <div className="code-body !p-3 flex-1">
-                  <pre className="text-xs leading-relaxed">{`// app/contact/page.tsx (Server)
-export default function Page() {
-  
-  async function submit(formData: FormData) {
-    'use server'  // ← Dans la fonction
-    
-    const email = formData.get('email')
-    await db.contact.create({ 
-      data: { email } 
-    })
-    revalidatePath('/contacts')
-  }
-
-  return (
-    <form action={submit}>
-      <input name="email" />
-      <button>Envoyer</button>
-    </form>
-  )
-}`}</pre>
+                  <SyntaxHighlighter code={`// app/contact/page.tsx (Server)\nexport default function Page() {\n  \n  async function submit(formData: FormData) {\n    'use server'  // ← Dans la fonction\n    \n    const email = formData.get('email')\n    await db.contact.create({ \n      data: { email } \n    })\n    revalidatePath('/contacts')\n  }\n\n  return (\n    <form action={submit}>\n      <input name="email" />\n      <button>Envoyer</button>\n    </form>\n  )\n}`} />
                 </div>
               </div>
 
@@ -120,24 +102,7 @@ export default function Page() {
                   <span className="code-title text-xs">2. Fichier dédié</span>
                 </div>
                 <div className="code-body !p-3 flex-1">
-                  <pre className="text-xs leading-relaxed">{`// app/actions.ts
-'use server'  // ← Tout le fichier
-
-import { db } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
-export async function createUser(formData: FormData) {
-  const user = await db.user.create({
-    data: {
-      name: formData.get('name'),
-      email: formData.get('email'),
-    }
-  })
-  
-  revalidatePath('/users')
-  redirect('/users/' + user.id)
-}`}</pre>
+                  <SyntaxHighlighter code={`// app/actions.ts\n'use server'  // ← Tout le fichier\n\nimport { db } from '@/lib/db'\nimport { revalidatePath } from 'next/cache'\nimport { redirect } from 'next/navigation'\n\nexport async function createUser(formData: FormData) {\n  const user = await db.user.create({\n    data: {\n      name: formData.get('name'),\n      email: formData.get('email'),\n    }\n  })\n  \n  revalidatePath('/users')\n  redirect('/users/' + user.id)\n}`} />
                 </div>
               </div>
             </div>

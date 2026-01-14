@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideMiddleware() {
   const [isVisible, setIsVisible] = useState(false)
@@ -99,35 +100,7 @@ export function SlideMiddleware() {
                 <span className="code-title text-xs">middleware.ts (racine du projet)</span>
               </div>
               <div className="code-body !p-4 flex-1">
-                <pre className="text-xs leading-relaxed">{`import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
-  // 🔐 Protection authentification
-  if (pathname.startsWith('/admin')) {
-    const token = request.cookies.get('auth')
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
-  }
-  
-  // 🔄 Rewrite (URL interne différente)
-  if (pathname === '/old-page') {
-    return NextResponse.rewrite(new URL('/new-page', request.url))
-  }
-  
-  // 📝 Ajouter des headers (CORS, etc.)
-  const response = NextResponse.next()
-  response.headers.set('x-custom-header', 'value')
-  return response
-}
-
-// Routes sur lesquelles le middleware s'applique
-export const config = {
-  matcher: ['/admin/:path*', '/api/:path*', '/old-page']
-}`}</pre>
+                <SyntaxHighlighter code={`import { NextResponse } from 'next/server'\nimport type { NextRequest } from 'next/server'\n\nexport function middleware(request: NextRequest) {\n  const { pathname } = request.nextUrl\n  \n  // 🔐 Protection authentification\n  if (pathname.startsWith('/admin')) {\n    const token = request.cookies.get('auth')\n    if (!token) {\n      return NextResponse.redirect(new URL('/login', request.url))\n    }\n  }\n  \n  // 🔄 Rewrite (URL interne différente)\n  if (pathname === '/old-page') {\n    return NextResponse.rewrite(new URL('/new-page', request.url))\n  }\n  \n  // 📝 Ajouter des headers (CORS, etc.)\n  const response = NextResponse.next()\n  response.headers.set('x-custom-header', 'value')\n  return response\n}\n\n// Routes sur lesquelles le middleware s'applique\nexport const config = {\n  matcher: ['/admin/:path*', '/api/:path*', '/old-page']\n}`} />
               </div>
             </div>
           </div>

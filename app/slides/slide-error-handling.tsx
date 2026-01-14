@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideErrorHandling() {
   const [isVisible, setIsVisible] = useState(false)
@@ -77,35 +78,7 @@ export function SlideErrorHandling() {
                 <span className="code-title text-xs">app/dashboard/error.tsx</span>
               </div>
               <div className="code-body !p-4 flex-1">
-                <pre className="text-xs leading-relaxed">{`'use client' // ⚠️ Obligatoire !
-
-import { useEffect } from 'react'
-
-export default function Error({
-  error,
-  reset,  // Fonction pour re-render le segment
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
-  useEffect(() => {
-    // Log vers service de monitoring (Sentry, etc.)
-    console.error('Error caught:', error)
-  }, [error])
-
-  return (
-    <div className="flex flex-col items-center py-12">
-      <h2 className="text-xl font-bold">Oops!</h2>
-      <p className="text-gray-600 mt-2">{error.message}</p>
-      <button
-        onClick={() => reset()}  {/* Re-render sans refresh */}
-        className="mt-4 px-6 py-2 bg-black text-white rounded-xl"
-      >
-        Réessayer
-      </button>
-    </div>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`'use client' // ⚠️ Obligatoire !\n\nimport { useEffect } from 'react'\n\nexport default function Error({\n  error,\n  reset,  // Fonction pour re-render le segment\n}: {\n  error: Error & { digest?: string }\n  reset: () => void\n}) {\n  useEffect(() => {\n    // Log vers service de monitoring (Sentry, etc.)\n    console.error('Error caught:', error)\n  }, [error])\n\n  return (\n    <div className="flex flex-col items-center py-12">\n      <h2 className="text-xl font-bold">Oops!</h2>\n      <p className="text-gray-600 mt-2">{error.message}</p>\n      <button\n        onClick={() => reset()}  {/* Re-render sans refresh */}\n        className="mt-4 px-6 py-2 bg-black text-white rounded-xl"\n      >\n        Réessayer\n      </button>\n    </div>\n  )\n}`} />
               </div>
             </div>
 
@@ -162,27 +135,7 @@ export default function Error({
                 <span className="code-title text-xs">app/global-error.tsx</span>
               </div>
               <div className="code-body !p-3 flex-1">
-                <pre className="text-xs leading-relaxed">{`'use client'
-// Remplace TOUT le layout racine
-// Doit définir <html> et <body>!
-
-export default function GlobalError({
-  error,
-  reset,
-}) {
-  return (
-    <html>
-      <body>
-        <div className="error-page">
-          <h1>Erreur critique</h1>
-          <button onClick={reset}>
-            Recharger l'app
-          </button>
-        </div>
-      </body>
-    </html>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`'use client'\n// Remplace TOUT le layout racine\n// Doit définir <html> et <body>!\n\nexport default function GlobalError({\n  error,\n  reset,\n}) {\n  return (\n    <html>\n      <body>\n        <div className="error-page">\n          <h1>Erreur critique</h1>\n          <button onClick={reset}>\n            Recharger l'app\n          </button>\n        </div>\n      </body>\n    </html>\n  )\n}`} />
               </div>
             </div>
 

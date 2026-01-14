@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideFileConventions() {
   const [isVisible, setIsVisible] = useState(false)
@@ -197,7 +198,7 @@ export default function Error({ error, reset }) {
                   <span className="code-title text-xs">app/{activeFileData.name}</span>
                 </div>
                 <div className="code-body flex-1 !p-4">
-                  <pre className="text-xs leading-relaxed">{activeFileData.code}</pre>
+                  <SyntaxHighlighter code={activeFileData.code} />
                 </div>
               </div>
             </div>

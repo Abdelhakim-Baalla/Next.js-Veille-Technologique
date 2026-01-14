@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from './icons'
+import { SyntaxHighlighter } from './syntax-highlighter'
 
 export function SlideParallelRoutes() {
   const [isVisible, setIsVisible] = useState(false)
@@ -89,29 +90,7 @@ export function SlideParallelRoutes() {
                 <span className="code-title text-xs">app/dashboard/layout.tsx</span>
               </div>
               <div className="code-body !p-4 flex-1">
-                <pre className="text-xs leading-relaxed">{`// Les slots sont reçus comme props du layout
-export default function DashboardLayout({
-  children,      // page.tsx (slot implicite)
-  team,          // @team/page.tsx
-  analytics,     // @analytics/page.tsx
-  notifications, // @notifications/page.tsx
-}: {
-  children: React.ReactNode
-  team: React.ReactNode
-  analytics: React.ReactNode
-  notifications: React.ReactNode
-}) {
-  return (
-    <div className="grid grid-cols-12 gap-4 h-full">
-      <aside className="col-span-3">{team}</aside>
-      <main className="col-span-6">{children}</main>
-      <div className="col-span-3 space-y-4">
-        {analytics}
-        {notifications}
-      </div>
-    </div>
-  )
-}`}</pre>
+                <SyntaxHighlighter code={`// Les slots sont reçus comme props du layout\nexport default function DashboardLayout({\n  children,      // page.tsx (slot implicite)\n  team,          // @team/page.tsx\n  analytics,     // @analytics/page.tsx\n  notifications, // @notifications/page.tsx\n}: {\n  children: React.ReactNode\n  team: React.ReactNode\n  analytics: React.ReactNode\n  notifications: React.ReactNode\n}) {\n  return (\n    <div className="grid grid-cols-12 gap-4 h-full">\n      <aside className="col-span-3">{team}</aside>\n      <main className="col-span-6">{children}</main>\n      <div className="col-span-3 space-y-4">\n        {analytics}\n        {notifications}\n      </div>\n    </div>\n  )\n}`} />
               </div>
             </div>
 
@@ -167,23 +146,9 @@ export default function DashboardLayout({
                 <span className="code-title text-xs">Structure</span>
               </div>
               <div className="code-body !p-3 flex-1">
-                <pre className="text-xs leading-relaxed">{`app/dashboard/
-├── layout.tsx
-├── page.tsx
-│
-├── @team/
-│   ├── page.tsx
-│   ├── loading.tsx
-│   └── error.tsx
-│
-├── @analytics/
-│   ├── page.tsx
-│   ├── loading.tsx
-│   └── default.tsx
-│
-└── @notifications/
-    ├── page.tsx
-    └── default.tsx`}</pre>
+                <pre className="text-xs leading-relaxed">
+                  <span className="text-gray-400">app/dashboard/</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-emerald-400">layout.tsx</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-sky-400">page.tsx</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-blue-400 font-bold">@team/</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-sky-400">page.tsx</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-yellow-400">loading.tsx</span>{`\n`}<span className="text-gray-400">│   └──</span> <span className="text-red-400">error.tsx</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">├──</span> <span className="text-purple-400 font-bold">@analytics/</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-sky-400">page.tsx</span>{`\n`}<span className="text-gray-400">│   ├──</span> <span className="text-yellow-400">loading.tsx</span>{`\n`}<span className="text-gray-400">│   └──</span> <span className="text-orange-400">default.tsx</span>{`\n`}<span className="text-gray-400">│</span>{`\n`}<span className="text-gray-400">└──</span> <span className="text-green-400 font-bold">@notifications/</span>{`\n`}<span className="text-gray-400">    ├──</span> <span className="text-sky-400">page.tsx</span>{`\n`}<span className="text-gray-400">    └──</span> <span className="text-orange-400">default.tsx</span>
+                </pre>
               </div>
             </div>
           </div>
