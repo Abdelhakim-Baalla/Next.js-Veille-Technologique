@@ -169,22 +169,30 @@ export function SlideParallelRoutes() {
             {/* Benefits */}
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">⚡</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.zap className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">Chargement Indépendant</h4>
                 <p className="text-xs text-gray-500">Chaque slot a son propre loading.tsx</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🛡️</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.shield className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">Erreurs Isolées</h4>
                 <p className="text-xs text-gray-500">Une erreur n'affecte pas les autres slots</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🔄</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.refresh className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">Navigation Partielle</h4>
                 <p className="text-xs text-gray-500">Un slot peut naviguer sans affecter les autres</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">📋</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.file className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">default.tsx</h4>
                 <p className="text-xs text-gray-500">Fallback quand aucune route ne match</p>
               </div>

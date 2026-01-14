@@ -63,15 +63,15 @@ export function SlideAppRouter() {
 
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
-                <span className="text-red-500 mt-0.5">✗</span>
+                <Icons.x className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
                 <span>Layouts difficiles à partager entre routes</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-red-500 mt-0.5">✗</span>
+                <Icons.x className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
                 <span>Tout est Client Component par défaut</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-red-500 mt-0.5">✗</span>
+                <Icons.x className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
                 <span>Data fetching complexe (getServerSideProps)</span>
               </li>
             </ul>
@@ -112,15 +112,15 @@ export function SlideAppRouter() {
 
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
-                <span className="text-green-400 mt-0.5">✓</span>
+                <Icons.check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Layouts imbriqués et persistants</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-green-400 mt-0.5">✓</span>
+                <Icons.check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Server Components par défaut (0 JS client)</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-green-400 mt-0.5">✓</span>
+                <Icons.check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Data fetching simplifié avec async/await</span>
               </li>
             </ul>

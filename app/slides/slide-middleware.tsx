@@ -164,15 +164,16 @@ export const config = {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       result.action === 'redirect' ? 'bg-red-100' :
                       result.action === 'rewrite' ? 'bg-yellow-100' :
                       result.action === 'header' ? 'bg-purple-100' :
                       'bg-green-100'
                     }`}>
-                      {result.action === 'redirect' ? '↩️' :
-                       result.action === 'rewrite' ? '🔄' :
-                       result.action === 'header' ? '📝' : '✅'}
+                      {result.action === 'redirect' && <Icons.cornerDownRight className="w-5 h-5 text-red-600" />}
+                      {result.action === 'rewrite' && <Icons.refresh className="w-5 h-5 text-yellow-600" />}
+                      {result.action === 'header' && <Icons.code className="w-5 h-5 text-purple-600" />}
+                      {result.action === 'next' && <Icons.check className="w-5 h-5 text-green-600" />}
                     </div>
                     <div>
                       <div className="font-medium text-sm capitalize">{result.action}</div>
@@ -190,22 +191,30 @@ export const config = {
             
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🔐</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.lock className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">Auth</h4>
                 <p className="text-xs text-gray-500">Protection des routes</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🌍</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.globe className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">i18n</h4>
                 <p className="text-xs text-gray-500">Détection de langue</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🧪</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.terminal className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">A/B Test</h4>
                 <p className="text-xs text-gray-500">Feature flags</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">📊</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.activity className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">Analytics</h4>
                 <p className="text-xs text-gray-500">Tracking précoce</p>
               </div>

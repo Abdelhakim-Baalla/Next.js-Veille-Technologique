@@ -126,7 +126,7 @@ export default function DashboardLoading() {
     },
     {
       name: 'error.tsx',
-      icon: '🛡️',
+      icon: Icons.shield,
       description: 'Capture les erreurs JavaScript de ses enfants et affiche une UI de fallback. Permet de récupérer d\'une erreur sans recharger.',
       required: false,
       details: [
@@ -159,7 +159,7 @@ export default function DashboardError({
     },
     {
       name: 'not-found.tsx',
-      icon: '🔍',
+      icon: Icons.search,
       description: 'UI affichée quand la fonction notFound() est appelée ou quand aucune route ne correspond.',
       required: false,
       details: [

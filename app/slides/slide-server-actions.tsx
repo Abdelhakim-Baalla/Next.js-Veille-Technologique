@@ -167,7 +167,11 @@ export async function deleteUser(id: string) {
                         Envoi en cours...
                       </span>
                     )}
-                    {formState === 'success' && '✓ Envoyé !'}
+                    {formState === 'success' && (
+                      <span className="flex items-center gap-2">
+                        <Icons.check className="w-4 h-4" /> Envoyé !
+                      </span>
+                    )}
                   </button>
                 </form>
               </div>
@@ -177,30 +181,39 @@ export async function deleteUser(id: string) {
             
             <div className="grid grid-cols-2 gap-3">
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-2">🔄</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.refresh className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">revalidatePath</h4>
                 <p className="text-xs text-gray-500">Rafraîchit le cache d'une route</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-2">🏷️</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.tag className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">revalidateTag</h4>
                 <p className="text-xs text-gray-500">Invalide par tag de cache</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-2">↩️</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.cornerDownRight className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">redirect()</h4>
                 <p className="text-xs text-gray-500">Redirection après mutation</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-2">🍪</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.settings className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm mb-1">cookies()</h4>
                 <p className="text-xs text-gray-500">Lecture/écriture cookies</p>
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl flex items-start gap-2">
+              <Icons.lightbulb className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-yellow-800">
-                <strong>💡 Tip:</strong> useFormStatus et useFormState de React 
+                <strong>Tip:</strong> useFormStatus et useFormState de React 
                 permettent de gérer l'état pending et les erreurs côté client.
               </p>
             </div>

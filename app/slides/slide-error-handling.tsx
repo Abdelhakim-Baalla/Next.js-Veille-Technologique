@@ -119,16 +119,18 @@ export default function Error({
                       </div>
                       <button 
                         onClick={() => setShowError(true)}
-                        className="h-20 bg-red-50 border-2 border-red-200 rounded-xl flex items-center justify-center text-red-500 text-sm hover:bg-red-100 transition-colors"
+                        className="h-20 bg-red-50 border-2 border-red-200 rounded-xl flex items-center justify-center gap-2 text-red-500 text-sm hover:bg-red-100 transition-colors"
                         data-hover="true"
                       >
-                        💥 Cliquez pour déclencher une erreur
+                        <Icons.alertTriangle className="w-4 h-4" /> Cliquez pour déclencher une erreur
                       </button>
                     </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-8 animate-fadeIn">
-                    <div className="text-4xl mb-3">⚠️</div>
+                    <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-3">
+                      <Icons.alertTriangle className="w-8 h-8 text-red-500" />
+                    </div>
                     <h4 className="font-medium mb-2">Quelque chose s'est mal passé !</h4>
                     <p className="text-sm text-gray-500 mb-4">Error: Failed to fetch data</p>
                     <button
@@ -181,12 +183,16 @@ export default function GlobalError({
 
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🔒</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.lock className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">Isolation</h4>
                 <p className="text-xs text-gray-500">Erreur isolée au segment</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🔄</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.refresh className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">reset()</h4>
                 <p className="text-xs text-gray-500">Re-render sans refresh</p>
               </div>

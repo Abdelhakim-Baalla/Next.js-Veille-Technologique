@@ -171,7 +171,7 @@ export function SlideInterceptingRoutes() {
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
                 <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                  <span>🔗</span> Hard Navigation
+                  <Icons.link className="w-4 h-4" /> Hard Navigation
                 </h4>
                 <p className="text-xs text-gray-600">
                   Accès direct URL → Page complète → Pas d'interception

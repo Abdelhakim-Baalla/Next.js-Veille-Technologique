@@ -174,12 +174,16 @@ export default function Page() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">⚡</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.zap className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">Streaming SSR</h4>
                 <p className="text-xs text-gray-500">HTML envoyé progressivement</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="text-lg mb-1">🎯</div>
+                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
+                  <Icons.target className="w-4 h-4" />
+                </div>
                 <h4 className="font-medium text-sm">Granularité</h4>
                 <p className="text-xs text-gray-500">Loading par composant</p>
               </div>

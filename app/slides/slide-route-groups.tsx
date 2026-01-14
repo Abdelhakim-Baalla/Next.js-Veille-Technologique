@@ -113,9 +113,10 @@ export function SlideRouteGroups() {
               </div>
             </div>
 
-            <div className="p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+            <div className="p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200 flex items-start gap-3">
+              <Icons.alertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
               <p className="text-sm">
-                <span className="font-semibold">⚠️ Attention :</span> Deux route groups 
+                <span className="font-semibold">Attention :</span> Deux route groups 
                 ne peuvent pas résoudre vers le même URL. Par exemple, 
                 <span className="code-inline">(marketing)/about</span> et 
                 <span className="code-inline">(shop)/about</span> créeront un conflit.

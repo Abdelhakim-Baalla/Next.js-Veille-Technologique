@@ -157,7 +157,7 @@ export default async function UsersPage() {
 
                   <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">🎯</span>
+                      <Icons.target className="w-6 h-6" />
                       <h4 className="font-medium">SEO</h4>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -206,7 +206,9 @@ export function Counter() {
 
                 <div className="space-y-3">
                   <div className="p-3 bg-blue-50 rounded-xl border border-blue-200">
-                    <h4 className="font-medium text-sm text-blue-800 mb-2">🎯 Quand utiliser 'use client' ?</h4>
+                    <h4 className="font-medium text-sm text-blue-800 mb-2 flex items-center gap-2">
+                      <Icons.target className="w-4 h-4" /> Quand utiliser 'use client' ?
+                    </h4>
                     <ul className="text-xs text-blue-700 space-y-1">
                       <li>• Interactivité (clics, formulaires, modals)</li>
                       <li>• Hooks React (useState, useEffect, useContext)</li>
