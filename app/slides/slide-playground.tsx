@@ -1,11 +1,141 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Icons } from './icons'
+
+// Confetti Component
+function Confetti({ active }: { active: boolean }) {
+  if (!active) return null
+  const colors = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6']
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50">
+      {[...Array(50)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute animate-confetti"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: '-10px',
+            width: '10px',
+            height: '10px',
+            backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+            borderRadius: Math.random() > 0.5 ? '50%' : '0',
+            animationDelay: `${Math.random() * 0.5}s`,
+            animationDuration: `${2 + Math.random() * 2}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Achievement Toast
+function AchievementToast({ achievement, onClose }: { achievement: { icon: string; title: string; desc: string } | null; onClose: () => void }) {
+  useEffect(() => {
+    if (achievement) {
+      const timer = setTimeout(onClose, 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [achievement, onClose])
+  
+  if (!achievement) return null
+  return (
+    <div className="fixed top-4 right-4 z-50 animate-slideInRight">
+      <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl shadow-2xl">
+        <div className="text-3xl">{achievement.icon}</div>
+        <div>
+          <div className="font-bold text-sm">🏆 Achievement Unlocked!</div>
+          <div className="font-black">{achievement.title}</div>
+          <div className="text-xs text-white/80">{achievement.desc}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Mini Code Editor
+function CodeSandbox({ onClose }: { onClose: () => void }) {
+  const [code, setCode] = useState(`// Essaie d'écrire une page Next.js
+export default function Page() {
+  return (
+    <div>
+      Hello Next.js!
+    </div>
+  )
+}`)
+  const [errors, setErrors] = useState<string[]>([])
+  const [hints, setHints] = useState<string[]>([])
+
+  const validateCode = (input: string) => {
+    const newErrors: string[] = []
+    const newHints: string[] = []
+    
+    if (!input.includes('export default')) newErrors.push('❌ Missing "export default"')
+    if (input.includes('useState') && !input.includes('"use client"')) newErrors.push('❌ useState needs "use client"')
+    if (input.includes('useEffect') && !input.includes('"use client"')) newErrors.push('❌ useEffect needs "use client"')
+    if (input.includes('<html>') && !input.includes('<body>')) newErrors.push('❌ <html> needs <body>')
+    
+    if (input.includes('export default function')) newHints.push('✅ Correct export syntax!')
+    if (input.includes('"use client"')) newHints.push('✅ Client Component detected')
+    if (input.includes('"use server"')) newHints.push('✅ Server Action detected')
+    if (input.includes('async function')) newHints.push('💡 Async functions work great in Server Components')
+    
+    setErrors(newErrors)
+    setHints(newHints)
+  }
+
+  useEffect(() => { validateCode(code) }, [code])
+
+  const exercises = [
+    { title: 'Page basique', code: `export default function Page() {\n  return <h1>Hello</h1>\n}` },
+    { title: 'Client Component', code: `"use client"\n\nimport { useState } from 'react'\n\nexport default function Counter() {\n  const [count, setCount] = useState(0)\n  return <button onClick={() => setCount(c => c + 1)}>{count}</button>\n}` },
+    { title: 'Layout', code: `export default function Layout({ children }) {\n  return (\n    <html>\n      <body>{children}</body>\n    </html>\n  )\n}` },
+    { title: 'Server Action', code: `"use server"\n\nexport async function createUser(formData) {\n  const name = formData.get('name')\n  await db.user.create({ data: { name } })\n}` },
+  ]
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[80vh] overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+              <Icons.code className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-bold">Code Sandbox</span>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg"><Icons.x className="w-5 h-5" /></button>
+        </div>
+        <div className="flex">
+          <div className="w-48 border-r p-3 bg-gray-50">
+            <div className="text-xs font-medium text-black/40 mb-2">EXERCICES</div>
+            {exercises.map((ex, i) => (
+              <button key={i} onClick={() => setCode(ex.code)} className="w-full text-left p-2 text-sm rounded-lg hover:bg-white mb-1 transition-all">
+                {ex.title}
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 flex flex-col">
+            <textarea
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="flex-1 p-4 font-mono text-sm bg-gray-900 text-green-400 resize-none focus:outline-none min-h-[300px]"
+              spellCheck={false}
+            />
+            <div className="p-3 bg-gray-100 border-t max-h-32 overflow-auto">
+              {errors.map((e, i) => <div key={i} className="text-xs text-red-600 mb-1">{e}</div>)}
+              {hints.map((h, i) => <div key={i} className="text-xs text-green-600 mb-1">{h}</div>)}
+              {errors.length === 0 && hints.length === 0 && <div className="text-xs text-black/40">Écris du code pour voir les validations...</div>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function SlidePlayground() {
   const [isVisible, setIsVisible] = useState(false)
-  const [activeGame, setActiveGame] = useState<'menu' | 'quiz' | 'match' | 'debug' | 'flashcards' | 'speed'>('menu')
+  const [activeGame, setActiveGame] = useState<'menu' | 'quiz' | 'match' | 'debug' | 'flashcards' | 'speed' | 'random' | 'sandbox'>('menu')
   const [quizScore, setQuizScore] = useState(0)
   const [currentQuiz, setCurrentQuiz] = useState(0)
   const [quizAnswered, setQuizAnswered] = useState(false)
@@ -21,6 +151,38 @@ export function SlidePlayground() {
   const [timeLeft, setTimeLeft] = useState(30)
   const [speedRound, setSpeedRound] = useState(0)
   const [speedScore, setSpeedScore] = useState(0)
+  
+  // New features
+  const [darkMode, setDarkMode] = useState(false)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [musicPlaying, setMusicPlaying] = useState(false)
+  const [achievements, setAchievements] = useState<string[]>([])
+  const [currentAchievement, setCurrentAchievement] = useState<{ icon: string; title: string; desc: string } | null>(null)
+  const [totalScore, setTotalScore] = useState(0)
+  const [randomChallenges, setRandomChallenges] = useState<Array<{ type: string; question: string; options?: string[]; correct?: number }>>([])
+  const [randomIndex, setRandomIndex] = useState(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const allAchievements = [
+    { id: 'first_quiz', icon: '🎯', title: 'Premier Quiz', desc: 'Complète ton premier quiz' },
+    { id: 'perfect_score', icon: '💯', title: 'Score Parfait', desc: '100% de bonnes réponses' },
+    { id: 'speed_demon', icon: '⚡', title: 'Speed Demon', desc: 'Termine Speed Type en 30s' },
+    { id: 'streak_5', icon: '🔥', title: 'En Feu!', desc: '5 bonnes réponses de suite' },
+    { id: 'streak_10', icon: '🌟', title: 'Inarrêtable', desc: '10 bonnes réponses de suite' },
+    { id: 'match_master', icon: '🔗', title: 'Match Master', desc: 'Complete Speed Match' },
+    { id: 'debugger', icon: '🐛', title: 'Bug Hunter', desc: 'Trouve 10 bugs' },
+    { id: 'scholar', icon: '📚', title: 'Érudit', desc: 'Révise toutes les flashcards' },
+    { id: 'random_warrior', icon: '🎲', title: 'Random Warrior', desc: 'Complete le mode aléatoire' },
+    { id: 'dark_side', icon: '🌙', title: 'Dark Side', desc: 'Active le mode sombre' },
+  ]
+
+  const unlockAchievement = (id: string) => {
+    if (!achievements.includes(id)) {
+      setAchievements(prev => [...prev, id])
+      const ach = allAchievements.find(a => a.id === id)
+      if (ach) setCurrentAchievement(ach)
+    }
+  }
 
   useEffect(() => { setIsVisible(true) }, [])
   
@@ -30,6 +192,47 @@ export function SlidePlayground() {
       return () => clearTimeout(timer)
     }
   }, [activeGame, timeLeft])
+
+  // Check achievements
+  useEffect(() => {
+    if (streak >= 5 && !achievements.includes('streak_5')) unlockAchievement('streak_5')
+    if (streak >= 10 && !achievements.includes('streak_10')) unlockAchievement('streak_10')
+  }, [streak])
+
+  useEffect(() => {
+    if (darkMode && !achievements.includes('dark_side')) unlockAchievement('dark_side')
+  }, [darkMode])
+
+  // Music control
+  const toggleMusic = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio('https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3')
+      audioRef.current.loop = true
+      audioRef.current.volume = 0.1
+    }
+    if (musicPlaying) {
+      audioRef.current.pause()
+    } else {
+      audioRef.current.play()
+    }
+    setMusicPlaying(!musicPlaying)
+  }
+
+  // Generate random challenges
+  const startRandomMode = () => {
+    const challenges: Array<{ type: string; question: string; options?: string[]; correct?: number }> = []
+    // Add 5 random quiz questions
+    const shuffledQuiz = [...quizQuestions].sort(() => Math.random() - 0.5).slice(0, 5)
+    shuffledQuiz.forEach(q => challenges.push({ type: 'quiz', question: q.question, options: q.options, correct: q.correct }))
+    // Add 3 random debug challenges  
+    const shuffledDebug = [...debugChallenges].sort(() => Math.random() - 0.5).slice(0, 3)
+    shuffledDebug.forEach(d => challenges.push({ type: 'debug', question: d.error }))
+    // Shuffle all challenges
+    challenges.sort(() => Math.random() - 0.5)
+    setRandomChallenges(challenges)
+    setRandomIndex(0)
+    setActiveGame('random')
+  }
 
   const speedChallenges = [
     { prompt: 'Fichier pour UI partagée', answer: 'layout.tsx' },
@@ -116,7 +319,14 @@ export function SlidePlayground() {
     { code: '// layout.tsx\nexport const revalidate = 60', error: 'Config in layout', fix: 'Route config in page.tsx only' },
   ]
 
-  const [shuffledRight] = useState(() => [...matchPairs].sort(() => Math.random() - 0.5))
+  // Use a stable initial order for SSR, shuffle only on client
+  const [shuffledRight, setShuffledRight] = useState(() => [...matchPairs])
+  const [isClient, setIsClient] = useState(false)
+  
+  useEffect(() => {
+    setIsClient(true)
+    setShuffledRight([...matchPairs].sort(() => Math.random() - 0.5))
+  }, [])
 
   const handleQuizAnswer = (i: number) => { 
     setSelectedAnswer(i); setQuizAnswered(true)
@@ -138,24 +348,43 @@ export function SlidePlayground() {
       setSelectedMatch(null)
     }
   }
-  const resetGame = () => { setActiveGame('menu'); setQuizScore(0); setCurrentQuiz(0); setQuizAnswered(false); setSelectedAnswer(null); setCurrentCard(0); setFlipped(false); setMatchedPairs([]); setSelectedMatch(null); setDebugStep(0); setShowDebugAnswer(false); setStreak(0); setTimeLeft(30); setSpeedRound(0); setSpeedScore(0) }
+  const resetGame = () => { setActiveGame('menu'); setQuizScore(0); setCurrentQuiz(0); setQuizAnswered(false); setSelectedAnswer(null); setCurrentCard(0); setFlipped(false); setMatchedPairs([]); setSelectedMatch(null); setDebugStep(0); setShowDebugAnswer(false); setStreak(0); setTimeLeft(30); setSpeedRound(0); setSpeedScore(0); setRandomIndex(0); setShowConfetti(false) }
+
+  // Check quiz completion for achievements and confetti
+  const handleQuizComplete = () => {
+    unlockAchievement('first_quiz')
+    setTotalScore(s => s + quizScore)
+    if (quizScore === quizQuestions.length) {
+      unlockAchievement('perfect_score')
+      setShowConfetti(true)
+      setTimeout(() => setShowConfetti(false), 3000)
+    } else if (quizScore >= quizQuestions.length * 0.8) {
+      setShowConfetti(true)
+      setTimeout(() => setShowConfetti(false), 3000)
+    }
+  }
 
   const games = [
-    { id: 'quiz', icon: Icons.target, title: 'Quiz Master', desc: '20 questions + explications', color: 'bg-gradient-to-br from-purple-500 to-purple-600', badge: 'Popular' },
-    { id: 'match', icon: Icons.link, title: 'Speed Match', desc: '12 paires à connecter', color: 'bg-gradient-to-br from-orange-500 to-orange-600', badge: null },
-    { id: 'debug', icon: Icons.code, title: 'Debug Challenge', desc: '10 bugs à trouver', color: 'bg-gradient-to-br from-pink-500 to-pink-600', badge: null },
-    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '18 cartes mémo', color: 'bg-gradient-to-br from-blue-500 to-blue-600', badge: null },
-    { id: 'speed', icon: Icons.zap, title: 'Speed Type', desc: '30s chrono', color: 'bg-gradient-to-br from-green-500 to-emerald-600', badge: 'New' },
+    { id: 'quiz', icon: Icons.target, title: 'Quiz Master', desc: '20 questions', color: 'bg-gradient-to-br from-purple-500 to-purple-600', badge: 'Popular' },
+    { id: 'random', icon: Icons.shuffle, title: 'Défi Aléatoire', desc: 'Mix de tout!', color: 'bg-gradient-to-br from-yellow-500 to-orange-500', badge: 'Hot' },
+    { id: 'match', icon: Icons.link, title: 'Speed Match', desc: '12 paires', color: 'bg-gradient-to-br from-orange-500 to-orange-600', badge: null },
+    { id: 'debug', icon: Icons.code, title: 'Debug Challenge', desc: '10 bugs', color: 'bg-gradient-to-br from-pink-500 to-pink-600', badge: null },
+    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '18 cartes', color: 'bg-gradient-to-br from-blue-500 to-blue-600', badge: null },
+    { id: 'speed', icon: Icons.zap, title: 'Speed Type', desc: '30s chrono', color: 'bg-gradient-to-br from-green-500 to-emerald-600', badge: null },
+    { id: 'sandbox', icon: Icons.terminal, title: 'Code Sandbox', desc: 'Pratique!', color: 'bg-gradient-to-br from-gray-700 to-gray-900', badge: 'New' },
   ]
 
   return (
-    <div className="slide">
-      <div className="slide-content flex flex-col h-full py-6">
+    <div className={`slide transition-all duration-500 ${darkMode ? 'bg-gray-900' : ''}`}>
+      <Confetti active={showConfetti} />
+      <AchievementToast achievement={currentAchievement} onClose={() => setCurrentAchievement(null)} />
+      {activeGame === 'sandbox' && <CodeSandbox onClose={resetGame} />}
+      <div className={`slide-content flex flex-col h-full py-6 ${darkMode ? 'text-white' : ''}`}>
         <div className="flex items-start justify-between mb-4">
           <div>
             <div className={`slide-badge mb-2 ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>14 — Zone Interactive</div>
-            <h2 className={`text-3xl font-bold tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              {activeGame === 'menu' ? 'Mini-jeux & Quiz' : activeGame === 'quiz' ? 'Quiz Master' : activeGame === 'match' ? 'Speed Match' : activeGame === 'debug' ? 'Debug Challenge' : activeGame === 'speed' ? 'Speed Type' : 'Flashcards'}
+            <h2 className={`text-3xl font-bold tracking-tight ${darkMode ? 'text-white' : ''} ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+              {activeGame === 'menu' ? 'Mini-jeux & Quiz' : activeGame === 'quiz' ? 'Quiz Master' : activeGame === 'match' ? 'Speed Match' : activeGame === 'debug' ? 'Debug Challenge' : activeGame === 'speed' ? 'Speed Type' : activeGame === 'random' ? 'Défi Aléatoire' : activeGame === 'sandbox' ? 'Code Sandbox' : 'Flashcards'}
             </h2>
             {activeGame === 'quiz' && streak > 1 && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full animate-pulse">
@@ -163,31 +392,46 @@ export function SlidePlayground() {
               </div>
             )}
           </div>
-          {activeGame !== 'menu' && (
-            <button onClick={resetGame} data-hover className="flex items-center gap-2 px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:border-black">
-              <Icons.arrowLeft className="w-3 h-3" /> Retour
+          <div className="flex items-center gap-2">
+            {/* Music Toggle */}
+            <button onClick={toggleMusic} data-hover className={`p-2 rounded-lg border transition-all hover:scale-110 ${musicPlaying ? 'bg-green-100 border-green-400 text-green-600' : 'bg-gray-50 border-gray-200 hover:border-black'}`}>
+              {musicPlaying ? <Icons.volumeX className="w-4 h-4" /> : <Icons.volume2 className="w-4 h-4" />}
             </button>
-          )}
+            {/* Dark Mode Toggle */}
+            <button onClick={() => { setDarkMode(!darkMode); if (!darkMode) unlockAchievement('dark_side') }} data-hover className={`p-2 rounded-lg border transition-all hover:scale-110 ${darkMode ? 'bg-gray-700 border-gray-600 text-yellow-400' : 'bg-gray-50 border-gray-200 hover:border-black'}`}>
+              {darkMode ? <Icons.sun className="w-4 h-4" /> : <Icons.moon className="w-4 h-4" />}
+            </button>
+            {/* Achievements */}
+            <div className={`flex items-center gap-1 px-3 py-2 rounded-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-yellow-50 border-yellow-200'}`}>
+              <Icons.award className="w-4 h-4 text-yellow-500" />
+              <span className="text-xs font-bold">{achievements.length}/10</span>
+            </div>
+            {activeGame !== 'menu' && (
+              <button onClick={resetGame} data-hover className={`flex items-center gap-2 px-3 py-1.5 text-xs border rounded-lg transition-all hover:scale-105 ${darkMode ? 'border-gray-600 hover:border-white' : 'border-gray-200 hover:border-black'}`}>
+                <Icons.arrowLeft className="w-3 h-3" /> Retour
+              </button>
+            )}
+          </div>
         </div>
 
         {activeGame === 'menu' && (
-          <div className="flex-1 grid grid-cols-5 gap-3">
+          <div className="flex-1 grid grid-cols-7 gap-3">
             {games.map((g, i) => {
               const Icon = g.icon
               return (
-                <button key={g.id} onClick={() => setActiveGame(g.id as typeof activeGame)} data-hover
-                  className={`group relative flex flex-col items-center justify-center p-5 bg-gray-50 rounded-xl border border-gray-200 hover:border-black hover:shadow-lg transition-all ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+                <button key={g.id} onClick={() => g.id === 'random' ? startRandomMode() : setActiveGame(g.id as typeof activeGame)} data-hover
+                  className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border transition-all hover:shadow-lg hover:scale-[1.02] ${darkMode ? 'bg-gray-800 border-gray-700 hover:border-white' : 'bg-gray-50 border-gray-200 hover:border-black'} ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
                   style={{ animationDelay: `${i * 80}ms` }}>
                   {g.badge && (
-                    <div className={`absolute -top-2 -right-2 px-2 py-0.5 text-[10px] font-bold text-white rounded-full ${g.badge === 'New' ? 'bg-green-500' : 'bg-purple-500'} animate-pulse`}>
+                    <div className={`absolute -top-2 -right-2 px-2 py-0.5 text-[10px] font-bold text-white rounded-full ${g.badge === 'New' ? 'bg-green-500' : g.badge === 'Hot' ? 'bg-orange-500' : 'bg-purple-500'} animate-pulse`}>
                       {g.badge}
                     </div>
                   )}
-                  <div className={`w-12 h-12 rounded-xl ${g.color} flex items-center justify-center mb-3 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-lg`}>
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className={`w-10 h-10 rounded-xl ${g.color} flex items-center justify-center mb-2 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-lg`}>
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="font-bold text-sm mb-0.5">{g.title}</h3>
-                  <p className="text-[10px] text-black/40 text-center">{g.desc}</p>
+                  <h3 className="font-bold text-xs mb-0.5">{g.title}</h3>
+                  <p className={`text-[10px] text-center ${darkMode ? 'text-gray-400' : 'text-black/40'}`}>{g.desc}</p>
                 </button>
               )
             })}
@@ -265,6 +509,9 @@ export function SlidePlayground() {
                         <p className="font-bold text-lg">Quiz Terminé !</p>
                         <p className="text-white/80 text-sm">Score: {quizScore}/{quizQuestions.length} ({Math.round(quizScore/quizQuestions.length*100)}%)</p>
                         <div className="mt-2 flex gap-1 justify-center">{[...Array(5)].map((_, i) => <Icons.target key={i} className={`w-4 h-4 ${i < Math.round(quizScore/quizQuestions.length*5) ? 'text-yellow-300' : 'text-white/30'}`} />)}</div>
+                        <button onClick={() => { handleQuizComplete(); resetGame() }} data-hover className="mt-3 px-4 py-2 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-all">
+                          Retour au menu
+                        </button>
                       </div>
                     )}
                   </div>
@@ -415,10 +662,85 @@ export function SlidePlayground() {
           </div>
         )}
 
-        <div className={`mt-4 p-3 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-between ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
-          <div className="flex items-center gap-2 text-xs text-black/40"><Icons.lightbulb className="w-3 h-3" /><span>Pratique régulière = maîtrise</span></div>
-          <div className="flex items-center gap-4 text-xs text-black/40">
-            <span>20 quiz</span><span>18 flashcards</span><span>12 match</span><span>10 debug</span><span className="text-green-600 font-medium">+ Speed Type</span>
+        {/* Random Challenge Mode */}
+        {activeGame === 'random' && (
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex gap-1">{randomChallenges.map((_, i) => <div key={i} className={`w-4 h-1.5 rounded-full transition-all ${i < randomIndex ? 'bg-green-500' : i === randomIndex ? 'bg-orange-500 w-6' : 'bg-gray-200'}`} />)}</div>
+              <div className="flex items-center gap-3">
+                <div className={`px-2 py-1 text-[10px] rounded-full font-medium ${randomChallenges[randomIndex]?.type === 'quiz' ? 'bg-purple-100 text-purple-700' : randomChallenges[randomIndex]?.type === 'debug' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'}`}>
+                  {randomChallenges[randomIndex]?.type?.toUpperCase()}
+                </div>
+                <div className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs rounded-full font-mono">{randomIndex + 1}/{randomChallenges.length}</div>
+              </div>
+            </div>
+            
+            {randomIndex < randomChallenges.length && (
+              <div className="flex-1 flex items-center justify-center">
+                <div className="w-full max-w-lg p-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl border-2 border-orange-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center animate-bounce">
+                      <Icons.shuffle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg">Défi #{randomIndex + 1}</h4>
+                      <p className="text-xs text-black/50">{randomChallenges[randomIndex]?.type === 'quiz' ? 'Question Quiz' : randomChallenges[randomIndex]?.type === 'debug' ? 'Trouve le bug' : 'Connaissance'}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-white rounded-xl mb-4">
+                    <p className="font-medium text-lg">{randomChallenges[randomIndex]?.question}</p>
+                  </div>
+                  
+                  {randomChallenges[randomIndex]?.options ? (
+                    <div className="space-y-2">
+                      {randomChallenges[randomIndex].options.map((o: string, i: number) => (
+                        <button key={i} data-hover
+                          className="w-full p-3 bg-white rounded-lg text-left text-sm border-2 border-gray-100 hover:border-orange-400 hover:bg-orange-50 transition-all flex items-center gap-3"
+                          onClick={() => {
+                            if (i === randomChallenges[randomIndex].correct) {
+                              setTotalScore(s => s + 10)
+                              if (randomIndex < randomChallenges.length - 1) {
+                                setRandomIndex(i => i + 1)
+                              } else {
+                                unlockAchievement('random_warrior')
+                                setShowConfetti(true)
+                                setTimeout(() => { setShowConfetti(false); resetGame() }, 3000)
+                              }
+                            }
+                          }}>
+                          <span className="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-600">{String.fromCharCode(65 + i)}</span>
+                          <span>{o}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button data-hover
+                      className="w-full p-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold hover:scale-[1.02] transition-transform"
+                      onClick={() => {
+                        setTotalScore(s => s + 5)
+                        if (randomIndex < randomChallenges.length - 1) {
+                          setRandomIndex(i => i + 1)
+                        } else {
+                          unlockAchievement('random_warrior')
+                          setShowConfetti(true)
+                          setTimeout(() => { setShowConfetti(false); resetGame() }, 3000)
+                        }
+                      }}>
+                      Suivant <Icons.arrowRight className="w-5 h-5 inline ml-2" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className={`mt-4 p-3 rounded-lg border flex items-center justify-between ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-100'} ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
+          <div className={`flex items-center gap-2 text-xs ${darkMode ? 'text-gray-400' : 'text-black/40'}`}><Icons.lightbulb className="w-3 h-3" /><span>Pratique régulière = maîtrise</span></div>
+          <div className={`flex items-center gap-4 text-xs ${darkMode ? 'text-gray-400' : 'text-black/40'}`}>
+            <span>🏆 {achievements.length} badges</span>
+            <span>⚡ Score: {totalScore}</span>
             {bestStreak > 0 && <span className="text-orange-500 font-medium">🔥 Best: {bestStreak}x</span>}
           </div>
         </div>
