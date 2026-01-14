@@ -1,5 +1,6 @@
 'use client'
 
+// Logo component for navigation
 export function Logo() {
   return (
     <div className="relative w-10 h-10 rounded-xl overflow-hidden interactive">
