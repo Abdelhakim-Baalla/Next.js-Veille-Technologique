@@ -1,232 +1,275 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Icons } from './icons'
 
 export function SlideServerClient() {
   const [isVisible, setIsVisible] = useState(false)
-  const [activeComponent, setActiveComponent] = useState<'server' | 'client'>('server')
+  const [activeTab, setActiveTab] = useState<'server' | 'client'>('server')
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
   return (
-    <div className="h-full flex items-center justify-center px-8 py-20">
-      <div className="max-w-6xl w-full">
+    <div className="slide">
+      <div className="slide-content">
         {/* Header */}
-        <div className={`mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black text-white rounded-full text-xs font-mono mb-4">
-            10 / Server vs Client
+        <div className="slide-header">
+          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+            09 — Composants
           </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            Server & Client Components
+          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
+            Server vs Client Components
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl">
-            Le modèle hybride de React - le meilleur des deux mondes
+          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
+            Comprenez quand utiliser <span className="code-inline">'use client'</span> et comment 
+            optimiser le rendu hybride de Next.js pour des performances maximales.
           </p>
         </div>
 
-        {/* Toggle */}
-        <div className={`flex justify-center mb-8 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="bg-gray-100 p-1 rounded-xl flex">
+        {/* Tab Selector */}
+        <div className={`flex justify-center mb-8 ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
+          <div className="inline-flex bg-gray-100 rounded-xl p-1">
             <button
-              onClick={() => setActiveComponent('server')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                activeComponent === 'server'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-900'
+              onClick={() => setActiveTab('server')}
+              className={`px-6 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'server' 
+                  ? 'bg-white shadow-sm' 
+                  : 'hover:bg-gray-200'
               }`}
+              data-hover="true"
             >
-              🖥️ Server Component
+              <Icons.server className="w-4 h-4" /> Server Components
             </button>
             <button
-              onClick={() => setActiveComponent('client')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                activeComponent === 'client'
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-900'
+              onClick={() => setActiveTab('client')}
+              className={`px-6 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'client' 
+                  ? 'bg-white shadow-sm' 
+                  : 'hover:bg-gray-200'
               }`}
+              data-hover="true"
             >
-              💻 Client Component
+              <Icons.monitor className="w-4 h-4" /> Client Components
             </button>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Component Info */}
-          <div className={`transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-            {activeComponent === 'server' ? (
-              <div className="space-y-4">
-                <div className="p-6 bg-blue-50 rounded-2xl border-2 border-blue-200">
-                  <h3 className="text-2xl font-bold text-blue-900 mb-4">Server Component</h3>
-                  <p className="text-gray-700 mb-4">
-                    Par défaut dans Next.js 13+. Rendu sur le serveur, 0 JavaScript envoyé au client.
-                  </p>
-                  
-                  <h4 className="font-semibold mb-2">✅ Peut faire:</h4>
-                  <ul className="space-y-2 text-sm mb-4">
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Accéder directement à la base de données
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Utiliser des secrets / clés API
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Fetch data avec async/await
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Lire le système de fichiers
-                    </li>
-                  </ul>
+          {activeTab === 'server' ? (
+            <>
+              {/* Server Component */}
+              <div className={`${isVisible ? 'animate-fadeInLeft stagger-4' : 'opacity-0'}`}>
+                <h3 className="text-title mb-4">Server Component (Par défaut)</h3>
+                
+                <div className="code-window mb-4">
+                  <div className="code-header">
+                    <div className="code-dot red" />
+                    <div className="code-dot yellow" />
+                    <div className="code-dot green" />
+                    <span className="code-title">app/users/page.tsx</span>
+                  </div>
+                  <div className="code-body">
+                    <pre>{`// Pas de directive = Server Component
+// ✅ Exécuté sur le serveur uniquement
 
-                  <h4 className="font-semibold mb-2">❌ Ne peut PAS faire:</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2 text-red-700">
-                      <span className="w-5 h-5 bg-red-200 rounded-full flex items-center justify-center text-xs">✗</span>
-                      useState, useEffect, useContext
-                    </li>
-                    <li className="flex items-center gap-2 text-red-700">
-                      <span className="w-5 h-5 bg-red-200 rounded-full flex items-center justify-center text-xs">✗</span>
-                      Event handlers (onClick, onChange)
-                    </li>
-                    <li className="flex items-center gap-2 text-red-700">
-                      <span className="w-5 h-5 bg-red-200 rounded-full flex items-center justify-center text-xs">✗</span>
-                      Browser APIs (window, localStorage)
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="p-6 bg-purple-50 rounded-2xl border-2 border-purple-200">
-                  <h3 className="text-2xl font-bold text-purple-900 mb-4">Client Component</h3>
-                  <p className="text-gray-700 mb-4">
-                    Activé avec <code className="bg-purple-200 px-2 py-0.5 rounded">'use client'</code>. Pre-rendu sur serveur, puis hydraté côté client.
-                  </p>
-                  
-                  <h4 className="font-semibold mb-2">✅ Peut faire:</h4>
-                  <ul className="space-y-2 text-sm mb-4">
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      useState, useEffect, useReducer
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Event handlers interactifs
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Browser APIs
-                    </li>
-                    <li className="flex items-center gap-2 text-green-700">
-                      <span className="w-5 h-5 bg-green-200 rounded-full flex items-center justify-center text-xs">✓</span>
-                      Animations, transitions
-                    </li>
-                  </ul>
+import { db } from '@/lib/db'
 
-                  <h4 className="font-semibold mb-2">⚠️ Attention:</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2 text-orange-700">
-                      <span className="w-5 h-5 bg-orange-200 rounded-full flex items-center justify-center text-xs">!</span>
-                      JavaScript envoyé au client
-                    </li>
-                    <li className="flex items-center gap-2 text-orange-700">
-                      <span className="w-5 h-5 bg-orange-200 rounded-full flex items-center justify-center text-xs">!</span>
-                      Pas d'accès direct aux secrets
-                    </li>
-                    <li className="flex items-center gap-2 text-orange-700">
-                      <span className="w-5 h-5 bg-orange-200 rounded-full flex items-center justify-center text-xs">!</span>
-                      Hydration après le chargement
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Code Example */}
-          <div className={`transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            <div className="bg-gray-900 rounded-2xl p-6 h-full">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <span className="w-3 h-3 rounded-full bg-green-500" />
-                </div>
-                <span className={`text-sm font-mono ${activeComponent === 'server' ? 'text-blue-400' : 'text-purple-400'}`}>
-                  {activeComponent === 'server' ? 'server-component.tsx' : 'client-component.tsx'}
-                </span>
-              </div>
-              
-              {activeComponent === 'server' ? (
-                <pre className="text-sm font-mono text-gray-100 overflow-x-auto">
-{`// app/users/page.tsx
-// ℹ️ Pas besoin de directive - Server par défaut!
-
-import { db } from '@/lib/database'
+async function getUsers() {
+  // Accès direct à la base de données !
+  return await db.user.findMany()
+}
 
 export default async function UsersPage() {
-  // ✅ Accès direct à la DB sur le serveur
-  const users = await db.users.findMany()
-  
-  // ✅ Les secrets restent sur le serveur
-  const apiKey = process.env.SECRET_API_KEY
+  // Pas besoin d'API routes
+  const users = await getUsers()
   
   return (
     <ul>
       {users.map(user => (
-        <li key={user.id}>
-          {user.name}
-        </li>
+        <li key={user.id}>{user.name}</li>
       ))}
     </ul>
   )
-}
+}`}</pre>
+                  </div>
+                </div>
 
-// 🎯 Zéro JavaScript pour ce composant
-// envoyé au navigateur!`}
-                </pre>
-              ) : (
-                <pre className="text-sm font-mono text-gray-100 overflow-x-auto">
-{`// app/components/counter.tsx
-'use client' // 👈 Directive obligatoire!
+                <div className="space-y-3">
+                  <div className="p-3 bg-green-50 rounded-xl border border-green-200">
+                    <h4 className="font-medium text-sm text-green-800 mb-2">✅ Ce que vous POUVEZ faire</h4>
+                    <ul className="text-xs text-green-700 space-y-1">
+                      <li>• Accès direct base de données (Prisma, etc.)</li>
+                      <li>• Lecture de fichiers (fs.readFile)</li>
+                      <li>• Appels API avec secrets</li>
+                      <li>• Async/await directement dans le composant</li>
+                      <li>• Importer des dépendances lourdes (sans impact bundle)</li>
+                    </ul>
+                  </div>
+                  <div className="p-3 bg-red-50 rounded-xl border border-red-200">
+                    <h4 className="font-medium text-sm text-red-800 mb-2">❌ Ce que vous NE POUVEZ PAS faire</h4>
+                    <ul className="text-xs text-red-700 space-y-1">
+                      <li>• useState, useEffect, useRef</li>
+                      <li>• onClick, onChange, onSubmit</li>
+                      <li>• APIs navigateur (localStorage, window)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Avantages */}
+              <div className={`${isVisible ? 'animate-fadeInRight stagger-5' : 'opacity-0'}`}>
+                <h3 className="text-title mb-4">Pourquoi Server Components ?</h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Icons.package className="w-6 h-6" />
+                      <h4 className="font-medium">Bundle Size Réduit</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Le code et les dépendances restent sur le serveur. 
+                      Le client ne reçoit que le HTML/CSS.
+                    </p>
+                  </div>
+
+                  <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Icons.lock className="w-6 h-6" />
+                      <h4 className="font-medium">Sécurité</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Clés API, tokens, et logique sensible ne quittent jamais le serveur.
+                    </p>
+                  </div>
+
+                  <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Icons.zap className="w-6 h-6" />
+                      <h4 className="font-medium">Performance</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Fetching proche de la source de données. 
+                      Pas de waterfalls client.
+                    </p>
+                  </div>
+
+                  <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-2xl">🎯</span>
+                      <h4 className="font-medium">SEO</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      HTML complet envoyé au crawlers. 
+                      Pas besoin d'hydratation pour le contenu.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Client Component */}
+              <div className={`${isVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+                <h3 className="text-title mb-4">Client Component</h3>
+                
+                <div className="code-window mb-4">
+                  <div className="code-header">
+                    <div className="code-dot red" />
+                    <div className="code-dot yellow" />
+                    <div className="code-dot green" />
+                    <span className="code-title">components/counter.tsx</span>
+                  </div>
+                  <div className="code-body">
+                    <pre>{`'use client' // ← Directive obligatoire !
 
 import { useState } from 'react'
 
 export function Counter() {
-  // ✅ Hooks React disponibles
   const [count, setCount] = useState(0)
-  
+
   return (
     <div>
-      <p>Count: {count}</p>
-      
-      {/* ✅ Event handlers ok */}
+      <p>Compteur: {count}</p>
       <button onClick={() => setCount(c => c + 1)}>
-        Incrémenter
+        +1
       </button>
     </div>
   )
 }
 
-// 📦 Ce composant + ses dépendances
-// sont envoyés au client`}
-                </pre>
-              )}
-            </div>
-          </div>
-        </div>
+// ⚠️ Tout ce fichier est envoyé au client
+// ⚠️ Les imports deviennent partie du bundle`}</pre>
+                  </div>
+                </div>
 
-        {/* Pattern */}
-        <div className={`mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h4 className="font-semibold mb-2">💡 Pattern recommandé</h4>
-          <p className="text-sm text-gray-700">
-            Gardez les Server Components en haut de l'arbre, passez les Client Components comme <code className="bg-gray-200 px-1 rounded">children</code> ou props pour minimiser le JavaScript client.
-          </p>
+                <div className="space-y-3">
+                  <div className="p-3 bg-blue-50 rounded-xl border border-blue-200">
+                    <h4 className="font-medium text-sm text-blue-800 mb-2">🎯 Quand utiliser 'use client' ?</h4>
+                    <ul className="text-xs text-blue-700 space-y-1">
+                      <li>• Interactivité (clics, formulaires, modals)</li>
+                      <li>• Hooks React (useState, useEffect, useContext)</li>
+                      <li>• APIs navigateur (localStorage, géolocalisation)</li>
+                      <li>• Librairies client (charts, animations, drag-drop)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pattern Composition */}
+              <div className={`${isVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+                <h3 className="text-title mb-4">Pattern : Composition</h3>
+                
+                <div className="code-window mb-4">
+                  <div className="code-header">
+                    <div className="code-dot red" />
+                    <div className="code-dot yellow" />
+                    <div className="code-dot green" />
+                    <span className="code-title">app/dashboard/page.tsx</span>
+                  </div>
+                  <div className="code-body">
+                    <pre>{`// Server Component (pas de 'use client')
+import { db } from '@/lib/db'
+import { InteractiveChart } from './chart'
+
+export default async function Dashboard() {
+  // Fetch côté serveur
+  const data = await db.analytics.get()
+  
+  return (
+    <div>
+      {/* HTML statique */}
+      <h1>Dashboard</h1>
+      
+      {/* Passer data au client */}
+      <InteractiveChart data={data} />
+    </div>
+  )
+}`}</pre>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <h4 className="font-medium text-sm mb-3">📊 La frontière Server/Client</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full" />
+                      <span>Server → fetch, DB access</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                      <span>Client → interactivité, hooks</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-purple-500 rounded-full" />
+                      <span>Props → sérializables uniquement</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

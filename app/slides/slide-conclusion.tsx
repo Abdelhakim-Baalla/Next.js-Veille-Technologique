@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Icons } from './icons'
 
 export function SlideConclusion() {
   const [isVisible, setIsVisible] = useState(false)
@@ -10,117 +11,159 @@ export function SlideConclusion() {
   }, [])
 
   const concepts = [
-    { icon: '📁', title: 'File-based Routing', desc: 'Structure intuitive' },
-    { icon: '🎨', title: 'Layouts & Templates', desc: 'UI partagée' },
-    { icon: '📄', title: 'page.tsx', desc: 'Composant de route' },
-    { icon: '📦', title: 'Route Groups', desc: 'Organisation sans URL' },
-    { icon: '⚡', title: 'Parallel Routes', desc: 'Rendu simultané' },
-    { icon: '🔀', title: 'Intercepting Routes', desc: 'Modals & overlays' },
-    { icon: '⏳', title: 'Loading States', desc: 'Streaming SSR' },
-    { icon: '🛡️', title: 'Error Handling', desc: 'Boundaries automatiques' },
-    { icon: '🖥️', title: 'Server Components', desc: 'Par défaut, 0 JS' },
-    { icon: '💻', title: 'Client Components', desc: 'Interactivité' },
-    { icon: '🔧', title: 'Server Actions', desc: 'Mutations sans API' },
-    { icon: '🚦', title: 'Middleware', desc: 'Intercept & transform' },
+    { icon: Icons.folder, title: 'App Router', desc: 'Routing fichiers' },
+    { icon: Icons.file, title: 'Fichiers Spéciaux', desc: 'layout, page, template' },
+    { icon: Icons.grid, title: 'Route Groups', desc: 'Organisation (folder)' },
+    { icon: Icons.split, title: 'Parallel Routes', desc: 'Slots @folder' },
+    { icon: Icons.cornerDownRight, title: 'Intercepting', desc: 'Modals (.)' },
+    { icon: Icons.loader, title: 'Loading States', desc: 'Streaming SSR' },
+    { icon: Icons.alertTriangle, title: 'Error Handling', desc: 'Error boundaries' },
+    { icon: Icons.server, title: 'Server/Client', desc: 'Rendu hybride' },
+    { icon: Icons.zap, title: 'Server Actions', desc: 'Mutations directes' },
+    { icon: Icons.shield, title: 'Middleware', desc: 'Edge Runtime' },
   ]
 
   return (
-    <div className="h-full flex items-center justify-center px-8 py-20">
-      <div className="max-w-5xl w-full">
+    <div className="slide">
+      <div className="slide-content">
         {/* Header */}
-        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black text-white rounded-full text-xs font-mono mb-4">
-            13 / Conclusion
+        <div className="slide-header">
+          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+            12 — Conclusion
           </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
             Récapitulatif
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Vous maîtrisez maintenant les fondamentaux du routing Next.js App Router
+          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
+            Next.js App Router transforme la façon dont nous construisons des applications web.
+            Voici ce que nous avons appris.
           </p>
         </div>
 
         {/* Concepts Grid */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          {concepts.map((concept, index) => (
-            <div
-              key={concept.title}
-              className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all hover:scale-105 cursor-default"
-              style={{
-                animationDelay: `${index * 50}ms`,
-                animation: isVisible ? 'fadeIn 0.5s ease forwards' : 'none',
-                opacity: 0
-              }}
-            >
-              <div className="text-2xl mb-2">{concept.icon}</div>
-              <h4 className="font-semibold text-sm mb-1">{concept.title}</h4>
-              <p className="text-xs text-gray-500">{concept.desc}</p>
-            </div>
-          ))}
+        <div className={`grid grid-cols-2 md:grid-cols-5 gap-3 mb-8 ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
+          {concepts.map((concept) => {
+            const IconComponent = concept.icon
+            return (
+              <div 
+                key={concept.title}
+                className="group p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-gray-300 hover:bg-white transition-all text-center"
+                data-hover
+              >
+                <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-white border border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:border-black group-hover:text-white transition-all">
+                  <IconComponent className="w-5 h-5" />
+                </div>
+                <h4 className="font-medium text-sm mb-1">{concept.title}</h4>
+                <p className="text-xs text-gray-500">{concept.desc}</p>
+              </div>
+            )
+          })}
         </div>
 
-        {/* Key Takeaways */}
-        <div className={`grid md:grid-cols-3 gap-4 mb-10 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white">
-            <h3 className="text-lg font-bold mb-2">🎯 Simplicité</h3>
-            <p className="text-sm text-blue-100">
-              Le système de fichiers définit vos routes. Pas de configuration complexe.
-            </p>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Ressources */}
+          <div className={`${isVisible ? 'animate-fadeInLeft stagger-4' : 'opacity-0'}`}>
+            <h3 className="text-title mb-4 flex items-center gap-2">
+              <Icons.book className="w-6 h-6" />
+              Ressources
+            </h3>
+            
+            <div className="space-y-3">
+              <a 
+                href="https://nextjs.org/docs" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors group"
+                data-hover="true"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Documentation Next.js</h4>
+                    <p className="text-sm text-gray-500">nextjs.org/docs</p>
+                  </div>
+                  <span className="text-gray-400 group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </a>
+
+              <a 
+                href="https://nextjs.org/learn" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors group"
+                data-hover="true"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Learn Next.js</h4>
+                    <p className="text-sm text-gray-500">Cours interactif officiel</p>
+                  </div>
+                  <span className="text-gray-400 group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </a>
+
+              <a 
+                href="https://github.com/vercel/next.js/tree/canary/examples" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors group"
+                data-hover="true"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Examples GitHub</h4>
+                    <p className="text-sm text-gray-500">Exemples officiels</p>
+                  </div>
+                  <span className="text-gray-400 group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </a>
+            </div>
           </div>
-          <div className="p-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl text-white">
-            <h3 className="text-lg font-bold mb-2">⚡ Performance</h3>
-            <p className="text-sm text-purple-100">
-              Server Components par défaut. Streaming SSR. Minimal JavaScript.
-            </p>
-          </div>
-          <div className="p-6 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl text-white">
-            <h3 className="text-lg font-bold mb-2">🛠️ DX</h3>
-            <p className="text-sm text-green-100">
-              TypeScript natif. Hot reload. Error overlays. Conventions claires.
-            </p>
+
+          {/* Bonnes Pratiques */}
+          <div className={`${isVisible ? 'animate-fadeInRight stagger-5' : 'opacity-0'}`}>
+            <h3 className="text-title mb-4">✅ Bonnes Pratiques</h3>
+            
+            <div className="space-y-3">
+              <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                <h4 className="font-medium text-sm text-green-800 mb-2">Server Components par défaut</h4>
+                <p className="text-xs text-green-700">
+                  Utilisez 'use client' uniquement quand nécessaire (interactivité, hooks, browser APIs).
+                </p>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <h4 className="font-medium text-sm text-blue-800 mb-2">Colocation des fichiers</h4>
+                <p className="text-xs text-blue-700">
+                  Placez les composants, styles, et tests près des routes qui les utilisent.
+                </p>
+              </div>
+
+              <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <h4 className="font-medium text-sm text-purple-800 mb-2">Route Groups pour l'organisation</h4>
+                <p className="text-xs text-purple-700">
+                  Utilisez (folder) pour grouper sans affecter l'URL.
+                </p>
+              </div>
+
+              <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                <h4 className="font-medium text-sm text-yellow-800 mb-2">Loading et Error granulaires</h4>
+                <p className="text-xs text-yellow-700">
+                  Ajoutez loading.tsx et error.tsx à chaque segment important.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Resources */}
-        <div className={`p-6 bg-gray-900 rounded-2xl text-white transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h3 className="font-bold mb-4 text-lg">📚 Pour aller plus loin</h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-white/10 rounded flex items-center justify-center">📖</span>
-              <div>
-                <div className="font-medium">Documentation officielle</div>
-                <div className="text-gray-400">nextjs.org/docs</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-white/10 rounded flex items-center justify-center">🎓</span>
-              <div>
-                <div className="font-medium">Learn Next.js</div>
-                <div className="text-gray-400">nextjs.org/learn</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-white/10 rounded flex items-center justify-center">💻</span>
-              <div>
-                <div className="font-medium">Examples</div>
-                <div className="text-gray-400">github.com/vercel/next.js/examples</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-white/10 rounded flex items-center justify-center">🎥</span>
-              <div>
-                <div className="font-medium">Vercel YouTube</div>
-                <div className="text-gray-400">youtube.com/@vercel</div>
-              </div>
-            </div>
+        {/* Footer */}
+        <div className={`text-center mt-8 ${isVisible ? 'animate-fadeInUp stagger-6' : 'opacity-0'}`}>
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full">
+            <span className="text-lg">🎉</span>
+            <span className="font-medium">Merci pour votre attention !</span>
           </div>
-        </div>
-
-        {/* Thank You */}
-        <div className={`text-center mt-10 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="text-4xl mb-4">🎉</div>
-          <h3 className="text-2xl font-bold mb-2">Merci pour votre attention!</h3>
-          <p className="text-gray-500">Des questions?</p>
+          <p className="text-sm text-gray-500 mt-4">
+            Des questions ?
+          </p>
         </div>
       </div>
     </div>
