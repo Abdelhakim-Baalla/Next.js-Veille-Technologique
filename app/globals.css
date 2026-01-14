@@ -217,6 +217,11 @@ body {
   50% { transform: translateY(-10px) rotate(47deg); }
 }
 
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -373,7 +378,7 @@ body {
 .animate-glitch-2 { animation: glitch-2 3s ease-in-out infinite 0.5s; }
 .animate-gradient { animation: gradient-shift 3s ease infinite; background-size: 200% 200%; }
 .animate-morph { animation: morph 8s ease-in-out infinite; }
-.animate-orbit { animation: orbit 20s linear infinite; }
+.animate-orbit { animation: orbit 3s linear infinite; }
 .animate-wave { animation: wave 2s ease-in-out infinite; }
 
 .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }

@@ -136,6 +136,7 @@ export default function Page() {
 
 export function SlidePlayground() {
   const [isVisible, setIsVisible] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const [activeGame, setActiveGame] = useState<'menu' | 'quiz' | 'match' | 'debug' | 'flashcards' | 'speed' | 'random' | 'sandbox'>('menu')
   const [quizScore, setQuizScore] = useState(0)
   const [currentQuiz, setCurrentQuiz] = useState(0)
@@ -199,7 +200,10 @@ export function SlidePlayground() {
     }
   }
 
-  useEffect(() => { setIsVisible(true) }, [])
+  useEffect(() => { 
+    setIsVisible(true)
+    setIsMounted(true)
+  }, [])
   
   useEffect(() => {
     if (activeGame === 'speed' && timeLeft > 0) {
@@ -507,48 +511,100 @@ export function SlidePlayground() {
 
         {activeGame === 'quiz' && (
           <div className="flex-1 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-1">{quizQuestions.map((_, i) => <div key={i} className={`w-4 h-1.5 rounded-full transition-all ${i < currentQuiz ? 'bg-green-500' : i === currentQuiz ? 'bg-black w-6' : 'bg-gray-200'}`} />)}</div>
+            {/* Clean Minimal Header */}
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <span className="text-xs font-mono text-black/40">Q{currentQuiz + 1}/{quizQuestions.length}</span>
+                <div className="h-1 w-32 bg-gray-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-black rounded-full transition-all duration-500" 
+                    style={{ width: `${((currentQuiz) / quizQuestions.length) * 100}%` }}
+                  />
+                </div>
+                {streak >= 2 && (
+                  <span className="px-2 py-0.5 bg-black text-white text-[10px] font-mono rounded">
+                    {streak}x
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-3">
-                <div className="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] rounded-full font-medium">{quizQuestions[currentQuiz]?.category}</div>
-                <div className="px-3 py-1 bg-black text-white text-xs rounded-full font-mono">{quizScore}/{quizQuestions.length}</div>
-                <div className="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] rounded-full font-medium">👥 {availableClassmates.length} restants</div>
+                <span className="text-[10px] uppercase tracking-wider text-black/30">{quizQuestions[currentQuiz]?.category}</span>
+                <div className="w-px h-4 bg-gray-200" />
+                <span className="font-mono text-sm">{quizScore}</span>
               </div>
             </div>
+
             {currentQuiz < quizQuestions.length && (
-              <div className="flex-1 flex gap-4">
-                {/* Student Spinner Panel - Minimal Dark Theme */}
-                <div className="w-52 flex flex-col gap-2">
-                  <div className={`p-4 rounded-2xl transition-all duration-300 ${showSpinnerResult ? 'bg-black' : 'bg-gray-900'}`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Répondant</span>
-                      <span className="text-[10px] text-gray-600 font-mono">{availableClassmates.length} restants</span>
-                    </div>
-                    
-                    {/* Spinner Display - Sleek Dark */}
-                    <div className={`relative h-20 mb-4 rounded-xl overflow-hidden flex items-center justify-center border ${spinnerActive ? 'border-white/30' : showSpinnerResult ? 'border-white' : 'border-gray-700'}`}>
+              <div className="flex-1 flex gap-8">
+                {/* Intelligent Orbit Spinner - Creative Design */}
+                <div className="w-72 flex flex-col">
+                  <div className="flex-1 flex flex-col items-center justify-center relative">
+                    {/* Orbit System */}
+                    <div className="relative w-56 h-56">
+                      {/* Outer orbit ring */}
+                      <div className={`absolute inset-0 rounded-full border transition-all duration-700 ${
+                        spinnerActive ? 'border-black/20 animate-spin' : 'border-gray-100'
+                      }`} style={{ animationDuration: '8s' }} />
+                      
+                      {/* Middle orbit ring */}
+                      <div className={`absolute inset-4 rounded-full border transition-all duration-700 ${
+                        spinnerActive ? 'border-black/30 animate-spin' : 'border-gray-100'
+                      }`} style={{ animationDuration: '6s', animationDirection: 'reverse' }} />
+                      
+                      {/* Inner orbit ring */}
+                      <div className={`absolute inset-8 rounded-full border transition-all duration-700 ${
+                        spinnerActive ? 'border-black/40 animate-spin' : 'border-gray-100'
+                      }`} style={{ animationDuration: '4s' }} />
+                      
+                      {/* Orbiting dots when spinning */}
                       {spinnerActive && (
-                        <div className="absolute inset-0">
-                          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-                          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                        </div>
+                        <>
+                          <div className="absolute w-2 h-2 bg-black rounded-full animate-orbit" style={{ top: '0', left: '50%', transform: 'translateX(-50%)' }} />
+                          <div className="absolute w-1.5 h-1.5 bg-black/60 rounded-full animate-orbit" style={{ top: '50%', right: '0', transform: 'translateY(-50%)', animationDelay: '-2s' }} />
+                          <div className="absolute w-1 h-1 bg-black/40 rounded-full animate-orbit" style={{ bottom: '0', left: '50%', transform: 'translateX(-50%)', animationDelay: '-4s' }} />
+                        </>
                       )}
-                      {showSpinnerResult && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
-                      )}
-                      <div className="relative z-10 text-center">
+                      
+                      {/* Center content */}
+                      <div className="absolute inset-12 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-sm">
                         {spinnerActive ? (
-                          <span className="font-bold text-white text-base animate-pulse">{spinnerName}</span>
+                          <div className="text-center">
+                            <span className="block text-lg font-bold tracking-tight animate-pulse">{spinnerName?.split(' ')[0]}</span>
+                            <span className="text-[10px] text-black/40 uppercase tracking-widest">scanning</span>
+                          </div>
                         ) : showSpinnerResult && selectedStudent ? (
-                          <div>
-                            <span className="block text-white font-black text-lg">{selectedStudent.split(' ')[0]}</span>
-                            <span className="text-[10px] text-gray-400">{selectedStudent.split(' ')[1]}</span>
+                          <div className="text-center animate-fadeIn">
+                            <span className="block text-xl font-black">{selectedStudent.split(' ')[0]}</span>
+                            <span className="text-[10px] text-black/40 uppercase tracking-widest">{selectedStudent.split(' ')[1]}</span>
                           </div>
                         ) : (
-                          <span className="text-gray-500 text-sm">Appuie pour sélectionner</span>
+                          <div className="text-center">
+                            <span className="text-2xl">◎</span>
+                            <span className="block text-[10px] text-black/30 mt-1">ready</span>
+                          </div>
                         )}
                       </div>
+                      
+                      {/* Floating student names around orbit when not spinning - Client only */}
+                      {isMounted && !spinnerActive && !showSpinnerResult && availableClassmates.slice(0, 6).map((name, i) => {
+                        const angle = (i * 60) * (Math.PI / 180)
+                        const radius = 100
+                        const x = Math.cos(angle) * radius
+                        const y = Math.sin(angle) * radius
+                        return (
+                          <div
+                            key={i}
+                            className="absolute text-[9px] text-black/40 font-medium transition-all hover:text-black hover:scale-110"
+                            style={{
+                              left: `calc(50% + ${x}px)`,
+                              top: `calc(50% + ${y}px)`,
+                              transform: 'translate(-50%, -50%)'
+                            }}
+                          >
+                            {name.split(' ')[0]}
+                          </div>
+                        )
+                      })}
                     </div>
                     
                     {/* Spin Button - Minimal */}
@@ -556,105 +612,205 @@ export function SlidePlayground() {
                       onClick={spinForStudent} 
                       disabled={spinnerActive || availableClassmates.length === 0 || showSpinnerResult}
                       data-hover
-                      className={`w-full p-3 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
-                        spinnerActive ? 'bg-white/10 text-white cursor-wait' : 
-                        showSpinnerResult ? 'bg-white text-black' :
-                        availableClassmates.length === 0 ? 'bg-gray-800 text-gray-600 cursor-not-allowed' :
-                        'bg-white text-black hover:bg-gray-100'
+                      className={`mt-6 px-8 py-3 rounded-full text-sm font-medium transition-all ${
+                        spinnerActive 
+                          ? 'bg-gray-100 text-black/40 cursor-wait' 
+                          : showSpinnerResult 
+                            ? 'bg-black text-white' 
+                            : availableClassmates.length === 0 
+                              ? 'bg-gray-50 text-black/20 cursor-not-allowed' 
+                              : 'bg-black text-white hover:shadow-lg hover:scale-105'
                       }`}
                     >
                       {spinnerActive ? (
-                        <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sélection...</>
+                        'Scanning...'
                       ) : showSpinnerResult ? (
-                        <><Icons.check className="w-4 h-4" /> {selectedStudent?.split(' ')[0]} répond</>
+                        `${selectedStudent?.split(' ')[0]} →`
                       ) : availableClassmates.length === 0 ? (
-                        <>Terminé</>
+                        'Complete'
                       ) : (
-                        <><Icons.shuffle className="w-4 h-4" /> Spin</>
+                        'Select Student'
                       )}
                     </button>
+                    
+                    {/* Remaining count */}
+                    <div className="mt-4 text-[10px] text-black/30 font-mono">
+                      {availableClassmates.length} remaining
+                    </div>
+                  </div>
+                </div>
+
+                {/* Question Card - Clean & Minimal */}
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className={`p-8 rounded-2xl border transition-all duration-500 ${
+                    quizAnswered 
+                      ? selectedAnswer === quizQuestions[currentQuiz].correct 
+                        ? 'bg-emerald-50/50 border-emerald-200' 
+                        : 'bg-rose-50/50 border-rose-200'
+                      : 'bg-gray-50/50 border-gray-100'
+                  }`}>
+                    {/* Question header */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold ${
+                        quizAnswered 
+                          ? selectedAnswer === quizQuestions[currentQuiz].correct ? 'bg-emerald-500' : 'bg-rose-500'
+                          : 'bg-black'
+                      }`}>
+                        {quizAnswered ? (selectedAnswer === quizQuestions[currentQuiz].correct ? '✓' : '✗') : currentQuiz + 1}
+                      </div>
+                      {selectedStudent && (
+                        <span className="text-xs text-black/40">
+                          {selectedStudent.split(' ')[0]} répond
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* Question text */}
+                    <h4 className="text-xl font-semibold mb-8 leading-relaxed">{quizQuestions[currentQuiz].question}</h4>
+                    
+                    {/* Answer options - Clean grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {quizQuestions[currentQuiz].options.map((o, i) => (
+                        <button 
+                          key={i} 
+                          onClick={() => !quizAnswered && handleQuizAnswer(i)} 
+                          disabled={quizAnswered} 
+                          data-hover
+                          className={`p-4 rounded-xl text-left text-sm transition-all flex items-start gap-3 ${
+                            quizAnswered 
+                              ? i === quizQuestions[currentQuiz].correct 
+                                ? 'bg-emerald-100 border-2 border-emerald-400' 
+                                : selectedAnswer === i 
+                                  ? 'bg-rose-100 border-2 border-rose-400 opacity-60' 
+                                  : 'bg-white border border-gray-100 opacity-30' 
+                              : 'bg-white border border-gray-200 hover:border-black hover:shadow-sm'
+                          }`}
+                        >
+                          <span className={`w-6 h-6 rounded flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                            quizAnswered && i === quizQuestions[currentQuiz].correct 
+                              ? 'bg-emerald-500 text-white' 
+                              : quizAnswered && selectedAnswer === i 
+                                ? 'bg-rose-500 text-white' 
+                                : 'bg-gray-100 text-black/40'
+                          }`}>
+                            {String.fromCharCode(65 + i)}
+                          </span>
+                          <span className="flex-1 leading-relaxed">{o}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   
-                  {/* Participants List - Compact */}
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="flex flex-wrap gap-1">
-                      {availableClassmates.slice(0, 6).map((name, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-white rounded text-[9px] border border-gray-200 text-gray-600">{name.split(' ')[0]}</span>
+                  {/* Explanation - Appears below question */}
+                  {quizAnswered && (
+                    <div className="mt-4 p-6 bg-white rounded-xl border border-gray-100 animate-fadeInUp">
+                      <div className="flex items-start gap-4">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                          selectedAnswer === quizQuestions[currentQuiz].correct 
+                            ? 'bg-emerald-100 text-emerald-600' 
+                            : 'bg-amber-100 text-amber-600'
+                        }`}>
+                          {selectedAnswer === quizQuestions[currentQuiz].correct ? '✓' : '💡'}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm text-black/70 leading-relaxed mb-3">{quizQuestions[currentQuiz].explanation}</p>
+                          <p className="text-xs text-black/40">{quizQuestions[currentQuiz].tip}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Action button */}
+                      <div className="mt-6 flex justify-end">
+                        {currentQuiz < quizQuestions.length - 1 ? (
+                          <button 
+                            onClick={nextQuiz} 
+                            data-hover 
+                            className="px-6 py-2.5 bg-black text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all flex items-center gap-2"
+                          >
+                            Continue <Icons.arrowRight className="w-4 h-4" />
+                          </button>
+                        ) : (
+                          <button 
+                            onClick={() => { handleQuizComplete(); resetGame() }} 
+                            data-hover 
+                            className="px-6 py-2.5 bg-black text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
+                          >
+                            Finish Quiz
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Stats Sidebar - Clean */}
+                <div className="w-48 flex flex-col gap-4">
+                  {/* Score card */}
+                  <div className="p-4 bg-white rounded-xl border border-gray-100">
+                    <span className="text-[10px] uppercase tracking-wider text-black/30 block mb-2">Score</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold">{quizScore}</span>
+                      <span className="text-black/30 text-sm">/{quizQuestions.length}</span>
+                    </div>
+                    <div className="mt-2 h-1 bg-gray-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-black rounded-full transition-all duration-500" 
+                        style={{ width: `${(quizScore / quizQuestions.length) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Streak card */}
+                  {streak > 0 && (
+                    <div className="p-4 bg-black text-white rounded-xl">
+                      <span className="text-[10px] uppercase tracking-wider text-white/50 block mb-1">Streak</span>
+                      <span className="text-2xl font-bold">{streak}</span>
+                    </div>
+                  )}
+                  
+                  {/* Category */}
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <span className="text-[10px] uppercase tracking-wider text-black/30 block mb-1">Topic</span>
+                    <span className="text-xs font-medium">{quizQuestions[currentQuiz]?.category}</span>
+                  </div>
+                  
+                  {/* Participants preview */}
+                  <div className="p-4 bg-gray-50 rounded-xl flex-1">
+                    <span className="text-[10px] uppercase tracking-wider text-black/30 block mb-3">Queue</span>
+                    <div className="space-y-1.5">
+                      {availableClassmates.slice(0, 5).map((name, i) => (
+                        <div key={i} className="text-[11px] text-black/50 flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-black/20" />
+                          {name.split(' ')[0]}
+                        </div>
                       ))}
-                      {availableClassmates.length > 6 && (
-                        <span className="px-2 py-0.5 bg-black text-white rounded text-[9px]">+{availableClassmates.length - 6}</span>
+                      {availableClassmates.length > 5 && (
+                        <div className="text-[10px] text-black/30 mt-2">
+                          +{availableClassmates.length - 5} more
+                        </div>
                       )}
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
 
-                {/* Question Card */}
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="w-full max-w-md p-6 bg-gray-50 rounded-xl border border-gray-200">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center"><Icons.target className="w-4 h-4 text-white" /></div>
-                      <span className="text-xs text-black/40">Question {currentQuiz + 1}/{quizQuestions.length}</span>
-                    </div>
-                    <h4 className="font-bold mb-4 text-lg">{quizQuestions[currentQuiz].question}</h4>
-                    <div className="space-y-2">
-                      {quizQuestions[currentQuiz].options.map((o, i) => (
-                        <button key={i} onClick={() => !quizAnswered && handleQuizAnswer(i)} disabled={quizAnswered} data-hover
-                          className={`w-full p-3 rounded-lg text-left text-sm transition-all flex items-center gap-3 ${quizAnswered ? i === quizQuestions[currentQuiz].correct ? 'bg-green-100 border-2 border-green-400 scale-[1.02]' : selectedAnswer === i ? 'bg-red-100 border-2 border-red-400 scale-95 opacity-70' : 'bg-white border border-gray-200 opacity-40 scale-95' : 'bg-white border border-gray-200 hover:border-black hover:scale-[1.01]'}`}>
-                          <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${quizAnswered && i === quizQuestions[currentQuiz].correct ? 'bg-green-500 text-white' : quizAnswered && selectedAnswer === i ? 'bg-red-500 text-white' : 'bg-gray-100 text-black/50'}`}>{String.fromCharCode(65 + i)}</span>
-                          <span className="flex-1">{o}</span>
-                          {quizAnswered && i === quizQuestions[currentQuiz].correct && <Icons.check className="w-5 h-5 text-green-500" />}
-                          {quizAnswered && selectedAnswer === i && i !== quizQuestions[currentQuiz].correct && <Icons.x className="w-5 h-5 text-red-500" />}
-                        </button>
-                      ))}
-                    </div>
+            {/* Quiz Complete Screen */}
+            {currentQuiz >= quizQuestions.length && (
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-black text-white rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span className="text-3xl">✓</span>
                   </div>
+                  <h3 className="text-2xl font-bold mb-2">Quiz Complete</h3>
+                  <p className="text-black/50 mb-6">Score: {quizScore}/{quizQuestions.length} ({Math.round(quizScore/quizQuestions.length*100)}%)</p>
+                  <button 
+                    onClick={() => { handleQuizComplete(); resetGame() }} 
+                    data-hover 
+                    className="px-8 py-3 bg-black text-white rounded-lg font-medium hover:shadow-lg transition-all"
+                  >
+                    Back to Menu
+                  </button>
                 </div>
-                
-                {/* Explanation Panel */}
-                {quizAnswered && (
-                  <div className="w-72 flex flex-col gap-3 animate-fadeInRight">
-                    <div className={`p-4 rounded-xl border-2 ${selectedAnswer === quizQuestions[currentQuiz].correct ? 'bg-green-50 border-green-300' : 'bg-amber-50 border-amber-300'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        {selectedAnswer === quizQuestions[currentQuiz].correct ? (
-                          <><div className="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center"><Icons.check className="w-4 h-4 text-white" /></div><span className="font-bold text-green-700">Correct !</span></>
-                        ) : (
-                          <><div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center"><Icons.lightbulb className="w-4 h-4 text-white" /></div><span className="font-bold text-amber-700">Pas tout à fait...</span></>
-                        )}
-                      </div>
-                      <p className="text-sm text-black/70 leading-relaxed">{quizQuestions[currentQuiz].explanation}</p>
-                    </div>
-                    
-                    <div className="p-3 bg-blue-50 rounded-xl border border-blue-200">
-                      <div className="flex items-start gap-2">
-                        <span className="text-lg">{quizQuestions[currentQuiz].tip.split(' ')[0]}</span>
-                        <p className="text-xs text-blue-700 font-medium leading-relaxed">{quizQuestions[currentQuiz].tip.substring(2)}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="p-3 bg-gray-100 rounded-xl">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-black/40">Catégorie</span>
-                        <span className="px-2 py-1 bg-white rounded-full font-medium">{quizQuestions[currentQuiz].category}</span>
-                      </div>
-                    </div>
-
-                    {currentQuiz < quizQuestions.length - 1 ? (
-                      <button onClick={nextQuiz} data-hover className="p-4 bg-black text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
-                        Question suivante <Icons.arrowRight className="w-5 h-5" />
-                      </button>
-                    ) : (
-                      <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl text-center">
-                        <Icons.award className="w-10 h-10 mx-auto mb-2" />
-                        <p className="font-bold text-lg">Quiz Terminé !</p>
-                        <p className="text-white/80 text-sm">Score: {quizScore}/{quizQuestions.length} ({Math.round(quizScore/quizQuestions.length*100)}%)</p>
-                        <div className="mt-2 flex gap-1 justify-center">{[...Array(5)].map((_, i) => <Icons.target key={i} className={`w-4 h-4 ${i < Math.round(quizScore/quizQuestions.length*5) ? 'text-yellow-300' : 'text-white/30'}`} />)}</div>
-                        <button onClick={() => { handleQuizComplete(); resetGame() }} data-hover className="mt-3 px-4 py-2 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-all">
-                          Retour au menu
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             )}
           </div>
