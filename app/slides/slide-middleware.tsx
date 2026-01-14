@@ -12,51 +12,94 @@ export function SlideMiddleware() {
   }, [])
 
   const getMiddlewareResult = (path: string) => {
-    if (path.startsWith('/admin') && !path.includes('token')) {
-      return { action: 'redirect', to: '/login', reason: 'Non authentifié' }
+    if (path.startsWith('/admin')) {
+      return { action: 'redirect', to: '/login', color: 'red', reason: 'Non authentifié' }
     }
     if (path.startsWith('/api/')) {
-      return { action: 'header', to: path, reason: 'CORS headers ajoutés' }
+      return { action: 'headers', to: path, color: 'purple', reason: 'CORS ajoutés' }
     }
     if (path === '/old-page') {
-      return { action: 'rewrite', to: '/new-page', reason: 'URL mise à jour' }
+      return { action: 'rewrite', to: '/new-page', color: 'yellow', reason: 'URL mappée' }
     }
-    return { action: 'next', to: path, reason: 'Continuer' }
+    return { action: 'next()', to: path, color: 'green', reason: 'Continue' }
   }
 
   const result = getMiddlewareResult(requestPath)
 
   return (
     <div className="slide">
-      <div className="slide-content">
-        {/* Header */}
-        <div className="slide-header">
-          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+      <div className="slide-content flex flex-col h-full py-6">
+        {/* Compact Header */}
+        <div className="mb-4">
+          <div className={`slide-badge mb-1 ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
             11 — Middleware
           </div>
-          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
-            Middleware Next.js
+          <h2 className={`text-2xl font-bold tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            Middleware Next.js <span className="font-mono text-lg bg-gray-100 px-2 py-0.5 rounded">Edge</span>
           </h2>
-          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
-            Interceptez et modifiez les requêtes avant qu'elles n'atteignent vos pages.
-            Authentification, redirections, A/B testing, et plus encore.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Code */}
-          <div className={`${isVisible ? 'animate-fadeInLeft stagger-3' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">middleware.ts</h3>
-            
-            <div className="code-window mb-4">
-              <div className="code-header">
+        {/* Main 3-Column Layout */}
+        <div className="flex gap-4 flex-1">
+          {/* Left: Concept + Edge Runtime */}
+          <div className={`w-1/4 flex flex-col gap-3 ${isVisible ? 'animate-fadeInLeft stagger-1' : 'opacity-0'}`}>
+            {/* Concept */}
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-semibold mb-2 flex items-center gap-1.5">
+                <Icons.shield className="w-3.5 h-3.5" /> Qu'est-ce que c'est ?
+              </p>
+              <p className="text-xs text-black/60 leading-relaxed">
+                Code qui s'exécute <strong>avant chaque requête</strong>. Parfait pour l'auth, redirections, A/B testing.
+              </p>
+            </div>
+
+            {/* Edge Runtime */}
+            <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 flex-1">
+              <p className="text-xs font-semibold text-blue-700 mb-2 flex items-center gap-1.5">
+                <Icons.zap className="w-3.5 h-3.5" /> Edge Runtime
+              </p>
+              <p className="text-xs text-blue-600/80 mb-2">
+                Ultra-rapide mais limité (pas de Node.js APIs)
+              </p>
+              <div className="space-y-1">
+                <div className="flex flex-wrap gap-1">
+                  {['fetch', 'crypto', 'Headers'].map(a => (
+                    <span key={a} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">✓ {a}</span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {['fs', 'path', 'child_process'].map(a => (
+                    <span key={a} className="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-[10px] line-through">✗ {a}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Use Cases */}
+            <div className="p-4 bg-black text-white rounded-xl">
+              <p className="text-xs font-medium mb-2">Cas d'usage</p>
+              <div className="space-y-1.5">
+                {['Auth & protection routes', 'Redirections/rewrites', 'A/B testing', 'Geolocation routing', 'Rate limiting'].map((c, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+                    <Icons.check className="w-3 h-3 text-green-400" />
+                    <span>{c}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Center: Code */}
+          <div className={`flex-1 flex flex-col ${isVisible ? 'animate-fadeIn stagger-2' : 'opacity-0'}`}>
+            <div className="code-window flex-1 flex flex-col">
+              <div className="code-header py-2">
                 <div className="code-dot red" />
                 <div className="code-dot yellow" />
                 <div className="code-dot green" />
-                <span className="code-title">middleware.ts (racine du projet)</span>
+                <span className="code-title text-xs">middleware.ts (racine du projet)</span>
               </div>
-              <div className="code-body">
-                <pre>{`import { NextResponse } from 'next/server'
+              <div className="code-body !p-4 flex-1">
+                <pre className="text-xs leading-relaxed">{`import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
@@ -66,70 +109,43 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/admin')) {
     const token = request.cookies.get('auth')
     if (!token) {
-      return NextResponse.redirect(
-        new URL('/login', request.url)
-      )
+      return NextResponse.redirect(new URL('/login', request.url))
     }
   }
   
   // 🔄 Rewrite (URL interne différente)
   if (pathname === '/old-page') {
-    return NextResponse.rewrite(
-      new URL('/new-page', request.url)
-    )
+    return NextResponse.rewrite(new URL('/new-page', request.url))
   }
   
-  // 📝 Ajouter des headers
+  // 📝 Ajouter des headers (CORS, etc.)
   const response = NextResponse.next()
-  response.headers.set('x-custom', 'value')
-  
+  response.headers.set('x-custom-header', 'value')
   return response
 }
 
-// Configurer les routes matchées
+// Routes sur lesquelles le middleware s'applique
 export const config = {
-  matcher: [
-    '/admin/:path*',
-    '/api/:path*',
-    '/((?!_next/static|favicon.ico).*)',
-  ],
+  matcher: ['/admin/:path*', '/api/:path*', '/old-page']
 }`}</pre>
-              </div>
-            </div>
-
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <h4 className="font-medium text-sm mb-3">⚡ Edge Runtime</h4>
-              <p className="text-xs text-gray-600 mb-3">
-                Le middleware s'exécute sur l'Edge Runtime — 
-                léger, rapide, limité (pas de Node.js APIs).
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">fetch</span>
-                <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">crypto</span>
-                <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Headers</span>
-                <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs line-through">fs</span>
-                <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs line-through">path</span>
               </div>
             </div>
           </div>
 
-          {/* Demo Interactive */}
-          <div className={`${isVisible ? 'animate-fadeInRight stagger-4' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Simulateur de Middleware</h3>
-            
-            <div className="space-y-3 mb-4">
-              <p className="text-sm text-gray-600">Testez différentes URLs :</p>
-              <div className="flex flex-wrap gap-2">
+          {/* Right: Interactive Demo */}
+          <div className={`w-1/3 flex flex-col gap-3 ${isVisible ? 'animate-fadeInRight stagger-3' : 'opacity-0'}`}>
+            {/* Path Selector */}
+            <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-medium text-black/40 mb-2">Testez une URL</p>
+              <div className="flex flex-wrap gap-1.5">
                 {['/dashboard', '/admin/users', '/api/data', '/old-page'].map((path) => (
                   <button
                     key={path}
                     onClick={() => setRequestPath(path)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-mono transition-all ${
-                      requestPath === path 
-                        ? 'bg-black text-white' 
-                        : 'bg-gray-100 hover:bg-gray-200'
+                    data-hover
+                    className={`px-2 py-1 rounded text-xs font-mono transition-all ${
+                      requestPath === path ? 'bg-black text-white' : 'bg-white border border-gray-200'
                     }`}
-                    data-hover="true"
                   >
                     {path}
                   </button>
@@ -137,49 +153,55 @@ export const config = {
               </div>
             </div>
 
-            <div className="browser mb-4">
+            {/* Flow Visualization */}
+            <div className="browser flex-1 flex flex-col">
               <div className="browser-header">
                 <div className="browser-dots">
                   <div className="code-dot red" />
                   <div className="code-dot yellow" />
                   <div className="code-dot green" />
                 </div>
-                <div className="browser-url">localhost:3000{requestPath}</div>
+                <div className="browser-url text-xs">localhost:3000{requestPath}</div>
               </div>
-              <div className="browser-body !p-0">
-                {/* Flow visualization */}
-                <div className="p-4 space-y-3">
+              <div className="browser-body !p-4 flex-1">
+                <div className="space-y-3">
+                  {/* Request */}
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-lg">
-                      📨
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Icons.arrowRight className="w-4 h-4 text-blue-600" />
                     </div>
                     <div>
-                      <div className="font-medium text-sm">Requête entrante</div>
-                      <div className="text-xs text-gray-500 font-mono">{requestPath}</div>
+                      <p className="text-xs font-medium">Requête</p>
+                      <p className="text-xs text-gray-400 font-mono">{requestPath}</p>
                     </div>
                   </div>
 
-                  <div className="border-l-2 border-gray-300 ml-5 pl-6 py-2">
-                    <div className="text-xs text-gray-500">⚙️ Middleware s'exécute...</div>
+                  {/* Middleware */}
+                  <div className="border-l-2 border-dashed border-gray-200 ml-4 pl-4 py-2">
+                    <p className="text-xs text-gray-400 flex items-center gap-1">
+                      <Icons.settings className="w-3 h-3 animate-spin" style={{ animationDuration: '3s' }} /> 
+                      middleware.ts
+                    </p>
                   </div>
 
+                  {/* Result */}
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      result.action === 'redirect' ? 'bg-red-100' :
-                      result.action === 'rewrite' ? 'bg-yellow-100' :
-                      result.action === 'header' ? 'bg-purple-100' :
-                      'bg-green-100'
-                    }`}>
-                      {result.action === 'redirect' && <Icons.cornerDownRight className="w-5 h-5 text-red-600" />}
-                      {result.action === 'rewrite' && <Icons.refresh className="w-5 h-5 text-yellow-600" />}
-                      {result.action === 'header' && <Icons.code className="w-5 h-5 text-purple-600" />}
-                      {result.action === 'next' && <Icons.check className="w-5 h-5 text-green-600" />}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                      ${result.color === 'red' ? 'bg-red-100' : ''}
+                      ${result.color === 'yellow' ? 'bg-yellow-100' : ''}
+                      ${result.color === 'purple' ? 'bg-purple-100' : ''}
+                      ${result.color === 'green' ? 'bg-green-100' : ''}`}
+                    >
+                      {result.action === 'redirect' && <Icons.cornerDownRight className="w-4 h-4 text-red-600" />}
+                      {result.action === 'rewrite' && <Icons.refresh className="w-4 h-4 text-yellow-600" />}
+                      {result.action === 'headers' && <Icons.code className="w-4 h-4 text-purple-600" />}
+                      {result.action === 'next()' && <Icons.check className="w-4 h-4 text-green-600" />}
                     </div>
                     <div>
-                      <div className="font-medium text-sm capitalize">{result.action}</div>
-                      <div className="text-xs text-gray-500">{result.reason}</div>
-                      {result.action !== 'next' && (
-                        <div className="text-xs text-gray-400 font-mono">→ {result.to}</div>
+                      <p className="text-xs font-medium font-mono">{result.action}</p>
+                      <p className="text-xs text-gray-400">{result.reason}</p>
+                      {result.action !== 'next()' && result.to !== requestPath && (
+                        <p className="text-xs text-gray-300 font-mono">→ {result.to}</p>
                       )}
                     </div>
                   </div>
@@ -187,38 +209,26 @@ export const config = {
               </div>
             </div>
 
-            <h3 className="text-title mb-4">Cas d'usage</h3>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.lock className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">Auth</h4>
-                <p className="text-xs text-gray-500">Protection des routes</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.globe className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">i18n</h4>
-                <p className="text-xs text-gray-500">Détection de langue</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.terminal className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">A/B Test</h4>
-                <p className="text-xs text-gray-500">Feature flags</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.activity className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">Analytics</h4>
-                <p className="text-xs text-gray-500">Tracking précoce</p>
-              </div>
+            {/* Matcher Info */}
+            <div className="p-3 border-2 border-dashed border-gray-200 rounded-xl">
+              <p className="text-xs font-medium mb-1 flex items-center gap-1.5">
+                <Icons.target className="w-3.5 h-3.5" /> config.matcher
+              </p>
+              <p className="text-xs text-black/50 font-mono">
+                Définit quelles routes déclenchent le middleware
+              </p>
             </div>
+          </div>
+        </div>
+
+        {/* Bottom: Key Insight */}
+        <div className={`mt-4 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-100 
+          ${isVisible ? 'animate-fadeInUp stagger-4' : 'opacity-0'}`}>
+          <div className="flex items-center gap-3">
+            <Icons.lightbulb className="w-5 h-5 text-blue-600" />
+            <p className="text-xs">
+              <strong>Placement :</strong> Le fichier middleware.ts doit être à la racine du projet (même niveau que app/). Il s'exécute sur l'Edge, proche de l'utilisateur, pour une latence minimale.
+            </p>
           </div>
         </div>
       </div>

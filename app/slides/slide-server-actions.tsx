@@ -16,207 +16,221 @@ export function SlideServerActions() {
     setTimeout(() => {
       setFormState('success')
       setTimeout(() => setFormState('idle'), 2000)
-    }, 1500)
+    }, 1200)
   }
 
   return (
     <div className="slide">
-      <div className="slide-content">
-        {/* Header */}
-        <div className="slide-header">
-          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+      <div className="slide-content flex flex-col h-full py-6">
+        {/* Compact Header */}
+        <div className="mb-4">
+          <div className={`slide-badge mb-1 ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
             10 — Server Actions
           </div>
-          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
-            Server Actions <span className="code-inline">'use server'</span>
+          <h2 className={`text-2xl font-bold tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            Server Actions <span className="font-mono text-lg bg-gray-100 px-2 py-0.5 rounded">"use server"</span>
           </h2>
-          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
-            Exécutez des fonctions côté serveur directement depuis vos composants.
-            Mutations, formulaires, et revalidation — sans créer d'API routes !
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Syntaxe */}
-          <div className={`${isVisible ? 'animate-fadeInLeft stagger-3' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Deux façons de définir</h3>
-            
-            <div className="code-window mb-4">
-              <div className="code-header">
-                <div className="code-dot red" />
-                <div className="code-dot yellow" />
-                <div className="code-dot green" />
-                <span className="code-title">1. Dans le composant (Server)</span>
-              </div>
-              <div className="code-body">
-                <pre>{`// app/contact/page.tsx (Server Component)
+        {/* Main 3-Column Layout */}
+        <div className="flex gap-4 flex-1">
+          {/* Left: Concept + Benefits */}
+          <div className={`w-1/4 flex flex-col gap-3 ${isVisible ? 'animate-fadeInLeft stagger-1' : 'opacity-0'}`}>
+            {/* Concept */}
+            <div className="p-4 bg-purple-50 rounded-xl border border-purple-100">
+              <p className="text-xs font-semibold text-purple-700 mb-2 flex items-center gap-1.5">
+                <Icons.server className="w-3.5 h-3.5" /> Qu'est-ce que c'est ?
+              </p>
+              <p className="text-xs text-purple-600/80 leading-relaxed">
+                Des <strong>fonctions côté serveur</strong> appelables directement depuis vos composants. Plus besoin d'API routes pour les mutations !
+              </p>
+            </div>
 
-export default function ContactPage() {
-  
-  async function sendMessage(formData: FormData) {
-    'use server' // ← Dans la fonction
-    
-    const email = formData.get('email')
-    const message = formData.get('message')
-    
-    await db.message.create({
-      data: { email, message }
-    })
-    
-    revalidatePath('/messages')
-  }
-
-  return (
-    <form action={sendMessage}>
-      <input name="email" type="email" />
-      <textarea name="message" />
-      <button type="submit">Envoyer</button>
-    </form>
-  )
-}`}</pre>
+            {/* Features */}
+            <div className="p-4 bg-black text-white rounded-xl flex-1">
+              <p className="text-xs font-medium mb-2 flex items-center gap-2">
+                <Icons.zap className="w-3.5 h-3.5" /> Fonctions intégrées
+              </p>
+              <div className="space-y-2">
+                {[
+                  { name: 'revalidatePath()', desc: 'Rafraîchir route' },
+                  { name: 'revalidateTag()', desc: 'Invalider cache' },
+                  { name: 'redirect()', desc: 'Redirection' },
+                  { name: 'cookies()', desc: 'Lire/écrire cookies' },
+                ].map((f, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <span className="font-mono text-white/90">{f.name}</span>
+                    <span className="text-white/50">{f.desc}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="code-window">
-              <div className="code-header">
-                <div className="code-dot red" />
-                <div className="code-dot yellow" />
-                <div className="code-dot green" />
-                <span className="code-title">2. Fichier dédié</span>
+            {/* Tip */}
+            <div className="p-3 bg-yellow-50 rounded-xl border border-yellow-200">
+              <p className="text-xs text-yellow-800 flex items-start gap-2">
+                <Icons.lightbulb className="w-3.5 h-3.5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <span>useFormStatus et useFormState pour gérer pending/errors côté client.</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Center: Code Examples */}
+          <div className={`flex-1 flex flex-col gap-3 ${isVisible ? 'animate-fadeIn stagger-2' : 'opacity-0'}`}>
+            {/* Two ways to define */}
+            <div className="flex gap-3 flex-1">
+              {/* Inline */}
+              <div className="code-window flex-1 flex flex-col">
+                <div className="code-header py-2">
+                  <div className="code-dot red" />
+                  <div className="code-dot yellow" />
+                  <div className="code-dot green" />
+                  <span className="code-title text-xs">1. Inline dans composant</span>
+                </div>
+                <div className="code-body !p-3 flex-1">
+                  <pre className="text-xs leading-relaxed">{`// app/contact/page.tsx (Server)
+export default function Page() {
+  
+  async function submit(formData: FormData) {
+    'use server'  // ← Dans la fonction
+    
+    const email = formData.get('email')
+    await db.contact.create({ 
+      data: { email } 
+    })
+    revalidatePath('/contacts')
+  }
+
+  return (
+    <form action={submit}>
+      <input name="email" />
+      <button>Envoyer</button>
+    </form>
+  )
+}`}</pre>
+                </div>
               </div>
-              <div className="code-body">
-                <pre>{`// app/actions.ts
-'use server' // ← Tout le fichier
+
+              {/* Separate file */}
+              <div className="code-window flex-1 flex flex-col">
+                <div className="code-header py-2">
+                  <div className="code-dot red" />
+                  <div className="code-dot yellow" />
+                  <div className="code-dot green" />
+                  <span className="code-title text-xs">2. Fichier dédié</span>
+                </div>
+                <div className="code-body !p-3 flex-1">
+                  <pre className="text-xs leading-relaxed">{`// app/actions.ts
+'use server'  // ← Tout le fichier
 
 import { db } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 export async function createUser(formData: FormData) {
   const user = await db.user.create({
     data: {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
+      name: formData.get('name'),
+      email: formData.get('email'),
     }
   })
   
   revalidatePath('/users')
-  return user
-}
-
-export async function deleteUser(id: string) {
-  await db.user.delete({ where: { id } })
-  revalidatePath('/users')
+  redirect('/users/' + user.id)
 }`}</pre>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Demo & Features */}
-          <div className={`${isVisible ? 'animate-fadeInRight stagger-4' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Démo : Formulaire avec Server Action</h3>
-            
-            <div className="browser mb-4">
+            {/* Demo Form */}
+            <div className="browser">
               <div className="browser-header">
                 <div className="browser-dots">
                   <div className="code-dot red" />
                   <div className="code-dot yellow" />
                   <div className="code-dot green" />
                 </div>
-                <div className="browser-url">localhost:3000/contact</div>
+                <div className="browser-url text-xs">localhost:3000/contact</div>
               </div>
-              <div className="browser-body !p-6">
+              <div className="browser-body !p-4">
                 <form 
-                  className="space-y-4"
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    simulateSubmit()
-                  }}
+                  className="flex gap-3"
+                  onSubmit={(e) => { e.preventDefault(); simulateSubmit() }}
                 >
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
-                    <input 
-                      type="email" 
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-black outline-none transition-colors"
-                      placeholder="votre@email.com"
-                      disabled={formState === 'loading'}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Message</label>
-                    <textarea 
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-black outline-none transition-colors resize-none"
-                      rows={3}
-                      placeholder="Votre message..."
-                      disabled={formState === 'loading'}
-                    />
-                  </div>
+                  <input 
+                    type="email" 
+                    className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-black outline-none transition-colors text-sm"
+                    placeholder="votre@email.com"
+                    disabled={formState === 'loading'}
+                  />
                   <button 
                     type="submit"
-                    className={`w-full py-3 rounded-xl font-medium transition-all ${
+                    data-hover
+                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all min-w-[100px] ${
                       formState === 'success' 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-black text-white hover:bg-gray-800'
+                        : 'bg-black text-white'
                     }`}
                     disabled={formState === 'loading'}
-                    data-hover="true"
                   >
                     {formState === 'idle' && 'Envoyer'}
                     {formState === 'loading' && (
                       <span className="flex items-center justify-center gap-2">
-                        <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                        Envoi en cours...
+                        <span className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
                       </span>
                     )}
-                    {formState === 'success' && (
-                      <span className="flex items-center gap-2">
-                        <Icons.check className="w-4 h-4" /> Envoyé !
-                      </span>
-                    )}
+                    {formState === 'success' && <Icons.check className="w-4 h-4 mx-auto" />}
                   </button>
                 </form>
               </div>
             </div>
+          </div>
 
-            <h3 className="text-title mb-4">Fonctionnalités Clés</h3>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.refresh className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm mb-1">revalidatePath</h4>
-                <p className="text-xs text-gray-500">Rafraîchit le cache d'une route</p>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.tag className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm mb-1">revalidateTag</h4>
-                <p className="text-xs text-gray-500">Invalide par tag de cache</p>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.cornerDownRight className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm mb-1">redirect()</h4>
-                <p className="text-xs text-gray-500">Redirection après mutation</p>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.settings className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm mb-1">cookies()</h4>
-                <p className="text-xs text-gray-500">Lecture/écriture cookies</p>
+          {/* Right: Flow Diagram */}
+          <div className={`w-1/4 flex flex-col gap-3 ${isVisible ? 'animate-fadeInRight stagger-3' : 'opacity-0'}`}>
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex-1">
+              <p className="text-xs font-medium text-black/40 mb-3">Flux d'exécution</p>
+              <div className="space-y-2">
+                {[
+                  { step: '1', text: 'Formulaire submit', icon: Icons.zap },
+                  { step: '2', text: 'POST automatique', icon: Icons.arrowRight },
+                  { step: '3', text: 'Action exécutée serveur', icon: Icons.server },
+                  { step: '4', text: 'Mutation DB', icon: Icons.layers },
+                  { step: '5', text: 'revalidatePath()', icon: Icons.refresh },
+                  { step: '6', text: 'UI mise à jour', icon: Icons.monitor },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs">
+                    <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
+                      {item.step}
+                    </div>
+                    <item.icon className="w-3 h-3 text-black/40" />
+                    <span className="text-black/70">{item.text}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl flex items-start gap-2">
-              <Icons.lightbulb className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-yellow-800">
-                <strong>Tip:</strong> useFormStatus et useFormState de React 
-                permettent de gérer l'état pending et les erreurs côté client.
-              </p>
+            {/* Comparison */}
+            <div className="p-3 bg-green-50 rounded-xl border border-green-100">
+              <p className="text-xs font-semibold text-green-700 mb-2">vs API Routes traditionnelles</p>
+              <div className="space-y-1 text-xs text-green-600/80">
+                <p>✓ Pas de fetch() manuel</p>
+                <p>✓ Type-safe end-to-end</p>
+                <p>✓ Revalidation intégrée</p>
+                <p>✓ Progressive enhancement</p>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* Bottom: Key Insight */}
+        <div className={`mt-4 p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-100 
+          ${isVisible ? 'animate-fadeInUp stagger-4' : 'opacity-0'}`}>
+          <div className="flex items-center gap-3">
+            <Icons.lightbulb className="w-5 h-5 text-purple-600" />
+            <p className="text-xs">
+              <strong>Progressive Enhancement :</strong> Les Server Actions fonctionnent même sans JavaScript activé ! Le formulaire fait un POST classique et Next.js gère le reste.
+            </p>
           </div>
         </div>
       </div>

@@ -11,114 +11,98 @@ export function SlideInterceptingRoutes() {
     setIsVisible(true)
   }, [])
 
+  const conventions = [
+    { pattern: '(.)', desc: 'Même niveau', example: 'photos/(.)photo/[id]', match: '../photo/[id]' },
+    { pattern: '(..)', desc: '1 niveau parent', example: 'feed/(..)photo/[id]', match: '../photo/[id]' },
+    { pattern: '(..)(..)', desc: '2 niveaux parent', example: 'app/a/b/(..)(..)c', match: '../../c' },
+    { pattern: '(...)', desc: 'Depuis app/', example: '(...)auth/login', match: 'app/auth/login' },
+  ]
+
   return (
     <div className="slide">
-      <div className="slide-content">
-        {/* Header */}
-        <div className="slide-header">
-          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+      <div className="slide-content flex flex-col h-full py-6">
+        {/* Compact Header */}
+        <div className="mb-4">
+          <div className={`slide-badge mb-1 ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
             06 — Intercepting Routes
           </div>
-          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
-            Interception de Routes
+          <h2 className={`text-2xl font-bold tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            Interception de Routes <span className="font-mono text-lg bg-gray-100 px-2 py-0.5 rounded">(.)</span>
           </h2>
-          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
-            Affichez une route dans un modal tout en gardant le contexte actuel.
-            L'URL change, mais le contenu s'affiche en overlay — comme Instagram !
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Conventions */}
-          <div className={`${isVisible ? 'animate-fadeInLeft stagger-3' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Conventions de Nommage</h3>
-            
-            <div className="space-y-3 mb-6">
-              <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="code-inline text-lg">(.) </span>
-                  <span className="font-medium">Même niveau</span>
-                </div>
-                <p className="text-sm text-gray-600">Intercepte une route au même niveau de dossier</p>
-                <code className="text-xs text-gray-500 block mt-2">photos/(.)photo/[id]/page.tsx</code>
-              </div>
-
-              <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="code-inline text-lg">(..)</span>
-                  <span className="font-medium">Un niveau au-dessus</span>
-                </div>
-                <p className="text-sm text-gray-600">Intercepte une route du dossier parent</p>
-                <code className="text-xs text-gray-500 block mt-2">feed/(..)photo/[id]/page.tsx</code>
-              </div>
-
-              <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="code-inline text-lg">(..)(..)</span>
-                  <span className="font-medium">Deux niveaux au-dessus</span>
-                </div>
-                <p className="text-sm text-gray-600">Intercepte depuis le grand-parent</p>
-              </div>
-
-              <div className="p-4 border-2 border-gray-200 rounded-xl hover:border-black transition-colors">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="code-inline text-lg">(...)</span>
-                  <span className="font-medium">Depuis la racine app</span>
-                </div>
-                <p className="text-sm text-gray-600">Intercepte depuis la racine de l'application</p>
+        {/* Main 3-Column Layout */}
+        <div className="flex gap-4 flex-1">
+          {/* Left: Concept + Conventions */}
+          <div className={`w-1/4 flex flex-col gap-3 ${isVisible ? 'animate-fadeInLeft stagger-1' : 'opacity-0'}`}>
+            {/* What is it */}
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-semibold mb-2 flex items-center gap-1.5">
+                <Icons.lightbulb className="w-3.5 h-3.5" /> Qu'est-ce que c'est ?
+              </p>
+              <p className="text-xs text-black/60 leading-relaxed">
+                Affiche une route dans un <strong>modal/overlay</strong> tout en changeant l'URL. Le contexte actuel est préservé.
+              </p>
+              <div className="mt-2 p-2 bg-black text-white rounded text-xs">
+                Comme Instagram ou Facebook!
               </div>
             </div>
 
-            <div className="code-window">
-              <div className="code-header">
-                <div className="code-dot red" />
-                <div className="code-dot yellow" />
-                <div className="code-dot green" />
-                <span className="code-title">Structure type Modal Photo</span>
+            {/* Conventions */}
+            <div className="p-4 bg-white border border-gray-200 rounded-xl flex-1">
+              <p className="text-xs font-medium text-black/40 mb-2">Conventions de nommage</p>
+              <div className="space-y-2">
+                {conventions.map((c, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs">
+                    <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded font-bold">{c.pattern}</span>
+                    <span className="text-black/60">{c.desc}</span>
+                  </div>
+                ))}
               </div>
-              <div className="code-body">
-                <pre>{`app/
-├── @modal/
-│   ├── default.tsx    ← null (pas de modal)
-│   └── (.)photos/
-│       └── [id]/
-│           └── page.tsx ← Modal photo
-├── photos/
-│   ├── page.tsx       ← Grille photos
-│   └── [id]/
-│       └── page.tsx   ← Page photo pleine
-└── layout.tsx         ← Contient {modal}`}</pre>
+            </div>
+
+            {/* Behavior */}
+            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+              <p className="text-xs font-medium text-blue-700 mb-2">2 comportements</p>
+              <div className="space-y-1.5 text-xs text-blue-600/80">
+                <div className="flex items-center gap-2">
+                  <Icons.zap className="w-3 h-3" />
+                  <span><strong>Soft nav</strong> → Modal</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icons.link className="w-3 h-3" />
+                  <span><strong>Direct URL</strong> → Page full</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Demo Visuelle */}
-          <div className={`${isVisible ? 'animate-fadeInRight stagger-4' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Démonstration Interactive</h3>
-            
-            {/* Photo Grid */}
-            <div className="browser relative">
+          {/* Center: Interactive Demo */}
+          <div className={`flex-1 flex flex-col gap-3 ${isVisible ? 'animate-fadeIn stagger-2' : 'opacity-0'}`}>
+            {/* Browser Demo */}
+            <div className="browser flex-1 relative flex flex-col">
               <div className="browser-header">
                 <div className="browser-dots">
                   <div className="code-dot red" />
                   <div className="code-dot yellow" />
                   <div className="code-dot green" />
                 </div>
-                <div className="browser-url">
+                <div className="browser-url text-xs">
                   {showModal ? 'localhost:3000/photos/1' : 'localhost:3000/photos'}
                 </div>
               </div>
-              <div className="browser-body !p-4 relative min-h-[300px]">
-                {/* Grid */}
-                <div className="grid grid-cols-3 gap-2">
-                  {[1, 2, 3, 4, 5, 6].map((id) => (
+              <div className="browser-body !p-4 flex-1 relative">
+                {/* Photo Grid */}
+                <p className="text-xs text-gray-400 mb-2">Galerie photos</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
                     <div
                       key={id}
-                      className="aspect-square bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300 transition-colors flex items-center justify-center text-gray-400 text-sm"
+                      className="aspect-square bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition-all flex items-center justify-center"
                       onClick={() => setShowModal(true)}
-                      data-hover="true"
+                      data-hover
                     >
-                      <Icons.image className="w-5 h-5" />
+                      <Icons.image className="w-4 h-4 text-gray-400" />
                     </div>
                   ))}
                 </div>
@@ -126,58 +110,101 @@ export function SlideInterceptingRoutes() {
                 {/* Modal Overlay */}
                 {showModal && (
                   <div 
-                    className="absolute inset-0 bg-black/50 flex items-center justify-center animate-fadeIn"
+                    className="absolute inset-0 bg-black/60 flex items-center justify-center animate-fadeIn p-4"
                     onClick={() => setShowModal(false)}
                   >
                     <div 
-                      className="bg-white rounded-2xl p-6 w-4/5 animate-scaleIn"
+                      className="bg-white rounded-xl p-4 w-3/4 animate-scaleIn"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="font-medium">Photo #1</span>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="font-medium text-sm">Photo #1</span>
                         <button 
                           onClick={() => setShowModal(false)}
-                          className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"
-                          data-hover="true"
+                          data-hover
+                          className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs hover:bg-gray-200"
                         >
                           ✕
                         </button>
                       </div>
-                      <div className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
-                        🖼️ Grande image
+                      <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                        <Icons.image className="w-8 h-8 text-gray-300" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-4 text-center">
-                        ⬆️ URL changée mais contexte préservé
-                      </p>
+                      <div className="mt-2 p-2 bg-green-50 rounded text-xs text-green-700 text-center">
+                        URL changée → Contexte préservé!
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
             </div>
-
-            <p className="text-sm text-gray-600 mt-3 text-center">
-              Cliquez sur une photo pour voir l'interception
+            
+            <p className="text-xs text-center text-black/40">
+              Cliquez une photo pour voir l'interception en action
             </p>
+          </div>
 
-            {/* Comportement */}
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                  <span>🖱️</span> Soft Navigation
-                </h4>
-                <p className="text-xs text-gray-600">
-                  Clic depuis la grille → Route interceptée → Modal affiché
-                </p>
+          {/* Right: File Structure + Code */}
+          <div className={`w-1/3 flex flex-col gap-3 ${isVisible ? 'animate-fadeInRight stagger-3' : 'opacity-0'}`}>
+            {/* File Structure */}
+            <div className="code-window flex-1 flex flex-col">
+              <div className="code-header py-2">
+                <div className="code-dot red" />
+                <div className="code-dot yellow" />
+                <div className="code-dot green" />
+                <span className="code-title text-xs">Structure Modal Photo</span>
               </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                  <Icons.link className="w-4 h-4" /> Hard Navigation
-                </h4>
-                <p className="text-xs text-gray-600">
-                  Accès direct URL → Page complète → Pas d'interception
-                </p>
+              <div className="code-body !p-3 flex-1">
+                <pre className="text-xs leading-relaxed">{`app/
+├── layout.tsx
+│   {/* Contient {modal} slot */}
+│
+├── @modal/
+│   ├── default.tsx     {/* return null */}
+│   └── (.)photos/
+│       └── [id]/
+│           └── page.tsx {/* Modal! */}
+│
+└── photos/
+    ├── page.tsx        {/* Grille */}
+    └── [id]/
+        └── page.tsx    {/* Page full */}`}</pre>
               </div>
             </div>
+
+            {/* Layout Code */}
+            <div className="code-window">
+              <div className="code-header py-2">
+                <div className="code-dot red" />
+                <div className="code-dot yellow" />
+                <div className="code-dot green" />
+                <span className="code-title text-xs">layout.tsx</span>
+              </div>
+              <div className="code-body !p-3">
+                <pre className="text-xs">{`export default function Layout({
+  children,
+  modal  // @modal slot
+}) {
+  return (
+    <>
+      {children}
+      {modal} {/* Overlay quand actif */}
+    </>
+  )
+}`}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom: Key Insight */}
+        <div className={`mt-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100 
+          ${isVisible ? 'animate-fadeInUp stagger-4' : 'opacity-0'}`}>
+          <div className="flex items-center gap-3">
+            <Icons.lightbulb className="w-5 h-5 text-purple-600" />
+            <p className="text-xs">
+              <strong>Pourquoi c'est puissant :</strong> L'utilisateur peut partager l'URL de la photo, et le destinataire verra la page complète. Mais depuis la grille, c'est un modal fluide. Meilleure UX + SEO.
+            </p>
           </div>
         </div>
       </div>

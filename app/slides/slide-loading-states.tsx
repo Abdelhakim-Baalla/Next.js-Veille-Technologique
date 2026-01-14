@@ -11,160 +11,180 @@ export function SlideLoadingStates() {
     setIsVisible(true)
     const interval = setInterval(() => {
       setIsLoading((prev) => !prev)
-    }, 2000)
+    }, 2500)
     return () => clearInterval(interval)
   }, [])
 
   return (
     <div className="slide">
-      <div className="slide-content">
-        {/* Header */}
-        <div className="slide-header">
-          <div className={`slide-badge ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+      <div className="slide-content flex flex-col h-full py-6">
+        {/* Compact Header */}
+        <div className="mb-4">
+          <div className={`slide-badge mb-1 ${isVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
             07 — Loading States
           </div>
-          <h2 className={`text-display mb-4 ${isVisible ? 'animate-fadeInUp stagger-1' : 'opacity-0'}`}>
-            États de Chargement
+          <h2 className={`text-2xl font-bold tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            États de Chargement <span className="font-mono text-lg bg-gray-100 px-2 py-0.5 rounded">loading.tsx</span>
           </h2>
-          <p className={`text-subtitle max-w-3xl ${isVisible ? 'animate-fadeInUp stagger-2' : 'opacity-0'}`}>
-            Créez des expériences de chargement fluides avec <span className="code-inline">loading.tsx</span>, 
-            React Suspense, et le Streaming SSR de Next.js.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* loading.tsx */}
-          <div className={`${isVisible ? 'animate-fadeInLeft stagger-3' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">loading.tsx — Fichier Magique</h3>
-            
-            <div className="code-window mb-4">
-              <div className="code-header">
+        {/* Main 3-Column Layout */}
+        <div className="flex gap-4 flex-1">
+          {/* Left: Concept + How it works */}
+          <div className={`w-1/4 flex flex-col gap-3 ${isVisible ? 'animate-fadeInLeft stagger-1' : 'opacity-0'}`}>
+            {/* What is it */}
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-semibold mb-2 flex items-center gap-1.5">
+                <Icons.loader className="w-3.5 h-3.5" /> Comment ça marche ?
+              </p>
+              <div className="space-y-2 text-xs text-black/60">
+                <div className="flex gap-2">
+                  <span className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[10px]">1</span>
+                  <span>Next.js wraps page.tsx dans Suspense</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[10px]">2</span>
+                  <span>loading.tsx = fallback automatique</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[10px]">3</span>
+                  <span>Streaming SSR envoie HTML progressif</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Benefits */}
+            <div className="p-4 bg-black text-white rounded-xl flex-1">
+              <p className="text-xs font-medium mb-2 flex items-center gap-2">
+                <Icons.zap className="w-3.5 h-3.5" /> Pourquoi l'utiliser
+              </p>
+              <div className="space-y-1.5">
+                {[
+                  'UX instantanée (pas de blank screen)',
+                  'Streaming SSR = TTFB rapide',
+                  'SEO friendly',
+                  'Automatic Suspense boundary',
+                ].map((b, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+                    <Icons.check className="w-3 h-3 text-green-400" />
+                    <span>{b}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Equivalent Code */}
+            <div className="p-3 border-2 border-dashed border-gray-200 rounded-xl">
+              <p className="text-xs font-mono text-black/40 mb-1">Équivalent React :</p>
+              <pre className="text-xs text-black/60">{`<Suspense fallback={<Loading/>}>
+  <Page />
+</Suspense>`}</pre>
+            </div>
+          </div>
+
+          {/* Center: Code + Demo */}
+          <div className={`flex-1 flex flex-col gap-3 ${isVisible ? 'animate-fadeIn stagger-2' : 'opacity-0'}`}>
+            {/* Code Window */}
+            <div className="code-window flex-1 flex flex-col">
+              <div className="code-header py-2">
                 <div className="code-dot red" />
                 <div className="code-dot yellow" />
                 <div className="code-dot green" />
-                <span className="code-title">app/dashboard/loading.tsx</span>
+                <span className="code-title text-xs">app/dashboard/loading.tsx</span>
               </div>
-              <div className="code-body">
-                <pre>{`// S'affiche automatiquement pendant
-// le chargement de page.tsx
-
+              <div className="code-body !p-4 flex-1">
+                <pre className="text-xs leading-relaxed">{`// Affiché automatiquement pendant le chargement
 export default function Loading() {
   return (
-    <div className="flex items-center gap-3">
-      <div className="animate-spin rounded-full 
-                      h-8 w-8 border-2 border-black 
-                      border-t-transparent" />
-      <span>Chargement...</span>
+    <div className="animate-pulse space-y-4">
+      {/* Skeleton Header */}
+      <div className="h-8 bg-gray-200 rounded w-1/3" />
+      
+      {/* Skeleton Content */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="h-24 bg-gray-200 rounded-xl" />
+        <div className="h-24 bg-gray-200 rounded-xl" />
+        <div className="h-24 bg-gray-200 rounded-xl" />
+      </div>
+      
+      {/* Skeleton Table */}
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded w-full" />
+        <div className="h-4 bg-gray-200 rounded w-2/3" />
+      </div>
     </div>
   )
 }`}</pre>
               </div>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-xl mb-4">
-              <h4 className="font-medium text-sm mb-3">Comment ça marche ?</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">1️⃣</span>
-                  <p className="text-gray-600">Next.js enveloppe <code>page.tsx</code> dans un <code>&lt;Suspense&gt;</code></p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">2️⃣</span>
-                  <p className="text-gray-600">Le fallback = contenu de <code>loading.tsx</code></p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">3️⃣</span>
-                  <p className="text-gray-600">Streaming SSR envoie le HTML progressivement</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="code-window">
-              <div className="code-header">
-                <div className="code-dot red" />
-                <div className="code-dot yellow" />
-                <div className="code-dot green" />
-                <span className="code-title">Équivalent React</span>
-              </div>
-              <div className="code-body">
-                <pre>{`// Ce que Next.js fait automatiquement :
-<Layout>
-  <Suspense fallback={<Loading />}>
-    <Page />
-  </Suspense>
-</Layout>`}</pre>
-              </div>
-            </div>
-          </div>
-
-          {/* Demo & Suspense avancé */}
-          <div className={`${isVisible ? 'animate-fadeInRight stagger-4' : 'opacity-0'}`}>
-            <h3 className="text-title mb-4">Démo en temps réel</h3>
-            
-            <div className="browser mb-6">
+            {/* Live Demo */}
+            <div className="browser">
               <div className="browser-header">
                 <div className="browser-dots">
                   <div className="code-dot red" />
                   <div className="code-dot yellow" />
                   <div className="code-dot green" />
                 </div>
-                <div className="browser-url">localhost:3000/dashboard</div>
+                <div className="browser-url text-xs">localhost:3000/dashboard</div>
               </div>
-              <div className="browser-body !p-4">
-                {/* Simulated loading state */}
-                <div className="space-y-4">
-                  <div className="h-8 bg-gray-100 rounded w-1/3" />
-                  
-                  {isLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <div className="flex items-center gap-3">
-                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-black border-t-transparent" />
-                        <span className="text-sm text-gray-600">Chargement...</span>
-                      </div>
+              <div className="browser-body !p-3">
+                {isLoading ? (
+                  <div className="animate-pulse space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-1/4" />
+                    <div className="flex gap-2">
+                      <div className="h-12 bg-gray-200 rounded flex-1" />
+                      <div className="h-12 bg-gray-200 rounded flex-1" />
+                      <div className="h-12 bg-gray-200 rounded flex-1" />
                     </div>
-                  ) : (
-                    <div className="space-y-3 animate-fadeIn">
-                      <div className="h-20 bg-gray-100 rounded-xl p-4">
-                        <div className="h-3 bg-gray-200 rounded w-2/3 mb-2" />
-                        <div className="h-3 bg-gray-200 rounded w-1/2" />
-                      </div>
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="h-16 bg-gray-100 rounded-xl" />
-                        <div className="h-16 bg-gray-100 rounded-xl" />
-                        <div className="h-16 bg-gray-100 rounded-xl" />
-                      </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2 animate-fadeIn">
+                    <p className="text-xs font-medium">Dashboard</p>
+                    <div className="flex gap-2">
+                      <div className="h-12 bg-blue-100 rounded flex-1 flex items-center justify-center text-xs text-blue-600">Stats</div>
+                      <div className="h-12 bg-green-100 rounded flex-1 flex items-center justify-center text-xs text-green-600">Users</div>
+                      <div className="h-12 bg-purple-100 rounded flex-1 flex items-center justify-center text-xs text-purple-600">Revenue</div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
+          </div>
 
-            <h3 className="text-title mb-4">Suspense Granulaire</h3>
-            
-            <div className="code-window mb-4">
-              <div className="code-header">
+          {/* Right: Advanced Suspense */}
+          <div className={`w-1/3 flex flex-col gap-3 ${isVisible ? 'animate-fadeInRight stagger-3' : 'opacity-0'}`}>
+            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+              <p className="text-xs font-semibold text-blue-700 mb-1">Suspense Granulaire</p>
+              <p className="text-xs text-blue-600/80">
+                Vous pouvez aussi utiliser Suspense manuellement pour un contrôle plus fin.
+              </p>
+            </div>
+
+            <div className="code-window flex-1 flex flex-col">
+              <div className="code-header py-2">
                 <div className="code-dot red" />
                 <div className="code-dot yellow" />
                 <div className="code-dot green" />
-                <span className="code-title">Chargement par composant</span>
+                <span className="code-title text-xs">Chargement par composant</span>
               </div>
-              <div className="code-body">
-                <pre>{`import { Suspense } from 'react'
+              <div className="code-body !p-3 flex-1">
+                <pre className="text-xs leading-relaxed">{`import { Suspense } from 'react'
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {/* Chaque section charge indépendamment */}
-      <Suspense fallback={<CardSkeleton />}>
+    <div className="grid gap-4">
+      {/* Chaque section indépendante */}
+      <Suspense fallback={<ProfileSkeleton />}>
         <UserProfile />
       </Suspense>
       
       <Suspense fallback={<ChartSkeleton />}>
-        <Analytics />
+        <Analytics />  {/* Peut être lent */}
       </Suspense>
       
-      <Suspense fallback={<ListSkeleton />}>
-        <RecentActivity />
+      <Suspense fallback={<TableSkeleton />}>
+        <DataTable />
       </Suspense>
     </div>
   )
@@ -172,22 +192,30 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.zap className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">Streaming SSR</h4>
-                <p className="text-xs text-gray-500">HTML envoyé progressivement</p>
+            {/* Visual diagram */}
+            <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-xs font-medium text-black/40 mb-2">Streaming progressif</p>
+              <div className="flex gap-1">
+                {['Shell', 'Profile', 'Charts', 'Table'].map((part, i) => (
+                  <div key={i} className="flex-1 h-6 bg-gray-200 rounded flex items-center justify-center text-[10px] font-medium" 
+                    style={{ animationDelay: `${i * 0.3}s` }}>
+                    {part}
+                  </div>
+                ))}
               </div>
-              <div className="p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center mb-2">
-                  <Icons.target className="w-4 h-4" />
-                </div>
-                <h4 className="font-medium text-sm">Granularité</h4>
-                <p className="text-xs text-gray-500">Loading par composant</p>
-              </div>
+              <p className="text-[10px] text-black/40 mt-1 text-center">HTML envoyé progressivement →</p>
             </div>
+          </div>
+        </div>
+
+        {/* Bottom: Key Insight */}
+        <div className={`mt-4 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-100 
+          ${isVisible ? 'animate-fadeInUp stagger-4' : 'opacity-0'}`}>
+          <div className="flex items-center gap-3">
+            <Icons.lightbulb className="w-5 h-5 text-yellow-600" />
+            <p className="text-xs">
+              <strong>Best Practice :</strong> Créez des skeletons qui ressemblent à votre contenu final. Ça réduit le "layout shift" et améliore la perception de vitesse (Perceived Performance).
+            </p>
           </div>
         </div>
       </div>

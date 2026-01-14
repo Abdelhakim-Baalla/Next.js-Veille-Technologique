@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { SlideIntro } from './slide-intro'
+import { SlideSommaire } from './slide-sommaire'
 import { SlideAppRouter } from './slide-app-router'
 import { SlideFileConventions } from './slide-file-conventions'
 import { SlideLayoutTemplate } from './slide-layout-template'
@@ -17,18 +18,19 @@ import { SlideConclusion } from './slide-conclusion'
 
 const slides = [
   { id: 0, component: SlideIntro },
-  { id: 1, component: SlideAppRouter },
-  { id: 2, component: SlideFileConventions },
-  { id: 3, component: SlideLayoutTemplate },
-  { id: 4, component: SlideRouteGroups },
-  { id: 5, component: SlideParallelRoutes },
-  { id: 6, component: SlideInterceptingRoutes },
-  { id: 7, component: SlideLoadingStates },
-  { id: 8, component: SlideErrorHandling },
-  { id: 9, component: SlideServerClient },
-  { id: 10, component: SlideServerActions },
-  { id: 11, component: SlideMiddleware },
-  { id: 12, component: SlideConclusion },
+  { id: 1, component: SlideSommaire },
+  { id: 2, component: SlideAppRouter },
+  { id: 3, component: SlideFileConventions },
+  { id: 4, component: SlideLayoutTemplate },
+  { id: 5, component: SlideRouteGroups },
+  { id: 6, component: SlideParallelRoutes },
+  { id: 7, component: SlideInterceptingRoutes },
+  { id: 8, component: SlideLoadingStates },
+  { id: 9, component: SlideErrorHandling },
+  { id: 10, component: SlideServerClient },
+  { id: 11, component: SlideServerActions },
+  { id: 12, component: SlideMiddleware },
+  { id: 13, component: SlideConclusion },
 ]
 
 // Enhanced Custom Cursor with trail effect
