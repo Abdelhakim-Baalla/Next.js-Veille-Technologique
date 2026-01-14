@@ -15,6 +15,7 @@ import { SlideServerClient } from './slide-server-client'
 import { SlideServerActions } from './slide-server-actions'
 import { SlideMiddleware } from './slide-middleware'
 import { SlideConclusion } from './slide-conclusion'
+import { SlidePlayground } from './slide-playground'
 
 const slides = [
   { id: 0, component: SlideIntro },
@@ -31,6 +32,7 @@ const slides = [
   { id: 11, component: SlideServerActions },
   { id: 12, component: SlideMiddleware },
   { id: 13, component: SlideConclusion },
+  { id: 14, component: SlidePlayground },
 ]
 
 // Enhanced Custom Cursor with trail effect

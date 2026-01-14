@@ -262,6 +262,91 @@ body {
   100% { background-position: 200% 0; }
 }
 
+/* NEW CREATIVE ANIMATIONS */
+@keyframes float-particle {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; transform: scale(1) rotate(45deg); }
+  50% { opacity: 0.6; transform: scale(1.05) rotate(45deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0) rotate(12deg); }
+  50% { transform: translateY(20px) rotate(12deg); }
+}
+
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+  40% { clip-path: inset(40% 0 40% 0); transform: translate(2px, -2px); }
+  60% { clip-path: inset(60% 0 20% 0); transform: translate(-1px, 1px); }
+  80% { clip-path: inset(80% 0 5% 0); transform: translate(1px, -1px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  25% { clip-path: inset(10% 0 70% 0); transform: translate(2px, -2px); }
+  50% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, 2px); }
+  75% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -1px); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  75% { transform: translateY(5px); }
+}
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-200px) rotate(720deg); opacity: 0; }
+}
+
+.animate-float-particle { animation: float-particle 20s linear infinite; }
+.animate-spin-slow { animation: spin-slow 30s linear infinite; }
+.animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+.animate-float-reverse { animation: float-reverse 6s ease-in-out infinite; }
+.animate-glitch-1 { animation: glitch-1 3s ease-in-out infinite; }
+.animate-glitch-2 { animation: glitch-2 3s ease-in-out infinite 0.5s; }
+.animate-gradient { animation: gradient-shift 3s ease infinite; background-size: 200% 200%; }
+.animate-morph { animation: morph 8s ease-in-out infinite; }
+.animate-orbit { animation: orbit 20s linear infinite; }
+.animate-wave { animation: wave 2s ease-in-out infinite; }
+
 .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
 .animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
 .animate-float-fast { animation: float-fast 4s ease-in-out infinite; }
@@ -629,4 +714,48 @@ body {
 
 .code-body::-webkit-scrollbar-thumb:hover {
   background: #525252;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Confetti animation */
+.animate-confetti {
+  animation: confetti 3s ease-out infinite;
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-400px) rotate(720deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   3D FLASHCARD UTILITIES
+   ============================================ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }
