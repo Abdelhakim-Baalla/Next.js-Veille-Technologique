@@ -32,6 +32,14 @@ export function SlidePlayground() {
     { question: "Comment créer une route catch-all ?", options: ['[slug]', '[...slug]', '[[slug]]', '(...slug)'], correct: 1 },
     { question: "Quel fichier pour une page 404 ?", options: ['404.tsx', 'error.tsx', 'not-found.tsx', 'missing.tsx'], correct: 2 },
     { question: "Où s'exécute le middleware ?", options: ['Client', 'Node.js', 'Edge Runtime', 'Browser'], correct: 2 },
+    { question: "Quel hook pour accéder aux params dynamiques ?", options: ['useParams', 'useRouter', 'usePathname', 'useSearchParams'], correct: 0 },
+    { question: "Comment créer une API route dans App Router ?", options: ['api.tsx', 'route.tsx', 'handler.tsx', 'endpoint.tsx'], correct: 1 },
+    { question: "Quelle méthode HTTP exporte route.tsx pour GET ?", options: ['getHandler', 'GET', 'get', 'handleGet'], correct: 1 },
+    { question: "Comment rendre un segment optionnel ?", options: ['[slug]', '(slug)', '[[slug]]', '[...slug]'], correct: 2 },
+    { question: "Quel composant pour la navigation ?", options: ['<Navigate>', '<Router>', '<Link>', '<Route>'], correct: 2 },
+    { question: "Comment prefetch une route ?", options: ['<Link prefetch>', '<Link preload>', 'router.prefetch()', 'Automatique'], correct: 3 },
+    { question: "Où placer les métadonnées SEO ?", options: ['head.tsx', 'meta.tsx', 'page.tsx export', 'seo.tsx'], correct: 2 },
+    { question: "Quel fichier pour les erreurs globales ?", options: ['error.tsx', 'global-error.tsx', 'catch.tsx', 'boundary.tsx'], correct: 1 },
   ]
 
   const flashcards = [
@@ -47,6 +55,12 @@ export function SlidePlayground() {
     { front: 'loading.tsx', back: 'Suspense automatique. Streaming SSR supporté.' },
     { front: 'error.tsx', back: 'Error Boundary automatique. Doit être "use client".' },
     { front: 'middleware.ts', back: 'Code Edge à chaque requête. Auth, redirections, i18n.' },
+    { front: 'page.tsx', back: 'Point entrée route. Rendu côté serveur par défaut.' },
+    { front: 'route.tsx', back: 'API Route handlers. Export GET, POST, PUT, DELETE.' },
+    { front: 'not-found.tsx', back: 'Page 404 personnalisée. Appelée par notFound().' },
+    { front: 'default.tsx', back: 'Fallback pour Parallel Routes non matchées.' },
+    { front: 'useRouter()', back: 'Hook navigation programmatique. push, replace, back.' },
+    { front: 'generateMetadata', back: 'Fonction async pour SEO dynamique par route.' },
   ]
 
   const matchPairs = [
@@ -94,10 +108,10 @@ export function SlidePlayground() {
   const resetGame = () => { setActiveGame('menu'); setQuizScore(0); setCurrentQuiz(0); setQuizAnswered(false); setSelectedAnswer(null); setCurrentCard(0); setFlipped(false); setMatchedPairs([]); setSelectedMatch(null); setDebugStep(0); setShowDebugAnswer(false) }
 
   const games = [
-    { id: 'quiz', icon: Icons.target, title: 'Quiz Master', desc: '12 questions', color: 'bg-purple-500' },
+    { id: 'quiz', icon: Icons.target, title: 'Quiz Master', desc: '20 questions', color: 'bg-purple-500' },
     { id: 'match', icon: Icons.link, title: 'Speed Match', desc: '12 paires', color: 'bg-orange-500' },
     { id: 'debug', icon: Icons.code, title: 'Debug Challenge', desc: '10 erreurs', color: 'bg-pink-500' },
-    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '12 cartes', color: 'bg-blue-500' },
+    { id: 'flashcards', icon: Icons.layers, title: 'Flashcards', desc: '18 cartes', color: 'bg-blue-500' },
   ]
 
   return (
@@ -219,26 +233,27 @@ export function SlidePlayground() {
         {activeGame === 'flashcards' && (
           <div className="flex-1 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-1">{flashcards.map((_, i) => <div key={i} className={`w-5 h-1.5 rounded-full ${i === currentCard ? 'bg-black' : 'bg-gray-200'}`} />)}</div>
-              <span className="text-xs text-black/40">{currentCard + 1}/{flashcards.length}</span>
+              <div className="flex gap-1">{flashcards.map((_, i) => <div key={i} className={`w-4 h-1 rounded-full transition-all ${i === currentCard ? 'bg-black w-6' : i < currentCard ? 'bg-green-500' : 'bg-gray-200'}`} />)}</div>
+              <div className="px-3 py-1 bg-black text-white text-xs rounded-full font-mono">{currentCard + 1}/{flashcards.length}</div>
             </div>
             <div className="flex-1 flex items-center justify-center">
-              <div className="w-full max-w-md">
-                <div onClick={() => setFlipped(!flipped)} data-hover className="relative h-56 cursor-pointer perspective-1000">
-                  <div className={`absolute inset-0 transition-transform duration-500 transform-style-preserve-3d ${flipped ? 'rotate-y-180' : ''}`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 flex flex-col items-center justify-center backface-hidden">
-                      <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4"><Icons.code className="w-6 h-6 text-white" /></div>
-                      <div className="text-2xl font-mono font-bold text-white text-center">{flashcards[currentCard].front}</div>
-                      <p className="text-white/60 text-xs mt-4">Cliquez pour révéler</p>
+              <div className="w-full max-w-lg">
+                <div onClick={() => setFlipped(!flipped)} data-hover className="relative h-64 cursor-pointer group" style={{ perspective: '1000px' }}>
+                  <div className={`relative w-full h-full transition-all duration-500 ${flipped ? '[transform:rotateY(180deg)]' : ''}`} style={{ transformStyle: 'preserve-3d' }}>
+                    <div className="absolute inset-0 bg-black rounded-2xl p-8 flex flex-col items-center justify-center shadow-2xl" style={{ backfaceVisibility: 'hidden' }}>
+                      <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-6"><Icons.code className="w-8 h-8 text-white" /></div>
+                      <div className="text-3xl font-mono font-bold text-white text-center mb-4">{flashcards[currentCard].front}</div>
+                      <div className="flex items-center gap-2 text-white/40 text-xs"><Icons.refresh className="w-3 h-3" /><span>Cliquez pour révéler</span></div>
                     </div>
-                    <div className="absolute inset-0 bg-white rounded-xl border-2 border-gray-200 p-6 flex items-center justify-center backface-hidden rotate-y-180">
-                      <p className="text-sm text-center text-black/70 leading-relaxed">{flashcards[currentCard].back}</p>
+                    <div className="absolute inset-0 bg-white rounded-2xl border-2 border-black p-8 flex flex-col items-center justify-center shadow-2xl [transform:rotateY(180deg)]" style={{ backfaceVisibility: 'hidden' }}>
+                      <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4"><Icons.check className="w-6 h-6 text-green-600" /></div>
+                      <p className="text-base text-center text-black/80 leading-relaxed font-medium">{flashcards[currentCard].back}</p>
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-3 mt-6">
-                  <button onClick={() => { if (currentCard > 0) { setCurrentCard(c => c - 1); setFlipped(false) } }} disabled={currentCard === 0} data-hover className="flex-1 p-3 border border-gray-200 rounded-lg font-medium disabled:opacity-30 hover:border-black flex items-center justify-center gap-2"><Icons.arrowLeft className="w-4 h-4" /> Précédent</button>
-                  <button onClick={() => { if (currentCard < flashcards.length - 1) { setCurrentCard(c => c + 1); setFlipped(false) } }} disabled={currentCard === flashcards.length - 1} data-hover className="flex-1 p-3 bg-black text-white rounded-lg font-medium disabled:opacity-30 flex items-center justify-center gap-2">Suivant <Icons.arrowRight className="w-4 h-4" /></button>
+                <div className="flex gap-3 mt-8">
+                  <button onClick={() => { if (currentCard > 0) { setCurrentCard(c => c - 1); setFlipped(false) } }} disabled={currentCard === 0} data-hover className="flex-1 p-4 border-2 border-gray-200 rounded-xl font-semibold disabled:opacity-30 hover:border-black flex items-center justify-center gap-2 transition-all"><Icons.arrowLeft className="w-5 h-5" /> Précédent</button>
+                  <button onClick={() => { if (currentCard < flashcards.length - 1) { setCurrentCard(c => c + 1); setFlipped(false) } }} disabled={currentCard === flashcards.length - 1} data-hover className="flex-1 p-4 bg-black text-white rounded-xl font-semibold disabled:opacity-30 flex items-center justify-center gap-2 hover:bg-gray-800 transition-all">Suivant <Icons.arrowRight className="w-5 h-5" /></button>
                 </div>
               </div>
             </div>
@@ -247,7 +262,7 @@ export function SlidePlayground() {
 
         <div className={`mt-4 p-3 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-between ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
           <div className="flex items-center gap-2 text-xs text-black/40"><Icons.lightbulb className="w-3 h-3" /><span>Pratique régulière = maîtrise</span></div>
-          <div className="flex items-center gap-4 text-xs text-black/40"><span>12 quiz</span><span>12 flashcards</span><span>12 match</span><span>10 debug</span></div>
+          <div className="flex items-center gap-4 text-xs text-black/40"><span>20 quiz</span><span>18 flashcards</span><span>12 match</span><span>10 debug</span></div>
         </div>
       </div>
     </div>

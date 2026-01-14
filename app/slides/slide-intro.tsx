@@ -103,30 +103,8 @@ export function SlideIntro() {
             </div>
           </div>
 
-          {/* Right Column - Stats & CTA */}
+          {/* Right Column - CTA */}
           <div className={`w-64 flex flex-col justify-center ${isVisible ? 'animate-fadeInRight stagger-2' : 'opacity-0'}`}>
-            {/* Stats */}
-            <div className="space-y-3 mb-6">
-              {[
-                { value: '15', label: 'Slides', icon: Icons.layout },
-                { value: '12', label: 'Concepts', icon: Icons.lightbulb },
-                { value: '4', label: 'Mini-jeux', icon: Icons.target },
-              ].map((stat, i) => {
-                const IconComponent = stat.icon
-                return (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                    <div className="w-8 h-8 rounded-lg bg-black/5 flex items-center justify-center">
-                      <IconComponent className="w-4 h-4 text-black/40" />
-                    </div>
-                    <div>
-                      <div className="text-xl font-bold text-black">{stat.value}</div>
-                      <div className="text-[10px] text-black/40 uppercase tracking-wider">{stat.label}</div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
             {/* CTA Button */}
             <button
               onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))}
@@ -148,23 +126,7 @@ export function SlideIntro() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className={`flex items-center justify-between pt-4 border-t border-gray-100 mt-4 ${isVisible ? 'animate-fadeInUp stagger-3' : 'opacity-0'}`}>
-          <div className="flex items-center gap-4 text-xs text-black/40">
-            <div className="flex items-center gap-1">
-              <Icons.book className="w-3 h-3" />
-              <span>Présentation technique</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-1">
-              {['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'].map((color, i) => (
-                <div key={i} className={`w-4 h-4 rounded-full ${color} border-2 border-white`} />
-              ))}
-            </div>
-            <span className="text-xs text-black/40">+12 concepts</span>
-          </div>
-        </div>
+
       </div>
     </div>
   )
